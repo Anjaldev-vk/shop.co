@@ -1,0 +1,378 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "user",
+      "password": "password",
+      "role": "user"
+    },
+    {
+      "id": "2",
+      "username": "admin",
+      "password": "admin_password",
+      "role": "admin"
+    },
+    {
+      "id": "3",
+      "username": "Anjal",
+      "email": "gamexanjalx@gmail.com",
+      "password": "654321",
+      "role": "user"
+    },
+    {
+      "id": 4,
+      "username": "anjal dev",
+      "email": "mkmanjal@gmail.com",
+      "password": "123456",
+      "role": "user"
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "T-shirt with Tape Details",
+      "price": 120,
+      "description": "Comfortable cotton t-shirt with modern tape detailing on the sleeves.",
+      "category": "T-Shirt",
+      "brand": "UrbanWear",
+      "stock": 25,
+      "colors": [
+        "Black",
+        "White",
+        "Navy"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "images": [
+        "https://image.hm.com/assets/hm/05/66/05664a801dd930fcfcee8bc419221598e426794b.jpg?imwidth=1260",
+        "https://image.hm.com/assets/hm/01/a2/01a24d8b9e67d266e7413692a3486c478a5b28d7.jpg?imwidth=1260"
+      ],
+      "rating": 4.5,
+      "isNewArrival": true,
+      "isTopSelling": false
+    },
+    {
+      "id": "2",
+      "name": "Skinny Fit Jeans",
+      "originalPrice": 260,
+      "discountedPrice": 240,
+      "discount": "20% off",
+      "description": "Slim-fit jeans with a modern stretch for comfort and style.",
+      "category": "Jeans",
+      "brand": "DenimCo",
+      "stock": 40,
+      "colors": [
+        "Blue",
+        "Black"
+      ],
+      "sizes": [
+        "28",
+        "30",
+        "32",
+        "34",
+        "36"
+      ],
+      "images": [
+        "https://image.hm.com/assets/hm/a1/eb/a1eb4df1bac12aa1f7c1684bb78c191fd90ed286.jpg?imwidth=1260",
+        "https://image.hm.com/assets/hm/4d/95/4d952a6a57c2c366e6b772c586119859f1390d4f.jpg?imwidth=1260"
+      ],
+      "rating": 4.5,
+      "isNewArrival": true,
+      "isTopSelling": false
+    },
+    {
+      "id": "3",
+      "name": "Checkered Shirt",
+      "price": 180,
+      "description": "Classic checkered shirt, perfect for casual and semi-formal outings.",
+      "category": "Shirt",
+      "brand": "StyleHub",
+      "stock": 30,
+      "colors": [
+        "Red-Black",
+        "Blue-White"
+      ],
+      "sizes": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "images": [
+        "https://image.hm.com/assets/hm/84/de/84de62aceda9354cd420b837c82f44a85cf6b36d.jpg?imwidth=1260",
+        "https://image.hm.com/assets/hm/a2/e1/a2e17e5847c3535628cabb27f41d78ceef944966.jpg?imwidth=1260"
+      ],
+      "rating": 4.5,
+      "isNewArrival": true,
+      "isTopSelling": false
+    },
+    {
+      "id": "4",
+      "name": "Sleeve Striped T-shirt",
+      "originalPrice": 160,
+      "discountedPrice": 130,
+      "discount": "30% off",
+      "description": "Trendy striped t-shirt with soft cotton fabric and slim fit.",
+      "category": "T-Shirt",
+      "brand": "UrbanWear",
+      "stock": 20,
+      "colors": [
+        "White-Black",
+        "Gray-Blue"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "images": [
+        "https://image.hm.com/assets/hm/a2/e1/a2e17e5847c3535628cabb27f41d78ceef944966.jpg?imwidth=1260",
+        "https://image.hm.com/assets/hm/50/d7/50d7b1f665474cdc57c76d418b16b1ed7d489946.jpg?imwidth=1260"
+      ],
+      "rating": 4.5,
+      "isNewArrival": true,
+      "isTopSelling": false
+    },
+    {
+      "id": "5",
+      "name": "Vertical Striped Shirt",
+      "originalPrice": 232,
+      "discountedPrice": 212,
+      "discount": "20% off",
+      "description": "Vertical striped shirt with a slim fit design for a modern look.",
+      "category": "Shirt",
+      "brand": "EliteStyle",
+      "stock": 18,
+      "colors": [
+        "White-Blue",
+        "Gray-Black"
+      ],
+      "sizes": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "images": [
+        "https://image.hm.com/assets/hm/75/0c/750c5e9c34da1a59bfecd04da803fe7bab6c5e60.jpg?imwidth=1260",
+        "https://image.hm.com/assets/hm/78/c8/78c85025776ef8b33560737a2889264c1e19f94a.jpg?imwidth=1260"
+      ],
+      "rating": 5,
+      "isNewArrival": false,
+      "isTopSelling": true
+    },
+    {
+      "id": "6",
+      "name": "Courage Graphic T-shirt",
+      "price": 145,
+      "description": "Cotton t-shirt with bold graphic print for a casual statement.",
+      "category": "T-Shirt",
+      "brand": "StreetMode",
+      "stock": 28,
+      "colors": [
+        "Black",
+        "White"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "images": [
+        "https://image.hm.com/assets/hm/48/6c/486cc2060e359564510bc0d33702e374d325c67a.jpg?imwidth=1260",
+        "https://image.hm.com/assets/hm/05/66/05664a801dd930fcfcee8bc419221598e426794b.jpg?imwidth=1260"
+      ],
+      "rating": 4,
+      "isNewArrival": false,
+      "isTopSelling": true
+    },
+    {
+      "id": "7",
+      "name": "Loose Fit Bermuda Shorts",
+      "price": 90,
+      "description": "Casual bermuda shorts with breathable cotton fabric.",
+      "category": "Shorts",
+      "brand": "CoolWear",
+      "stock": 35,
+      "colors": [
+        "Khaki",
+        "Navy",
+        "Black"
+      ],
+      "sizes": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "images": [
+        "https://image.hm.com/assets/hm/2a/56/2a56fd53f7ac7d1618087e8b352a6b8a77029ef0.jpg?imwidth=1260",
+        "https://image.hm.com/assets/hm/f3/ae/f3aeb0b8a4f10134f0f62d1b5a5b565a0c326c2e.jpg?imwidth=1260"
+      ],
+      "rating": 4,
+      "isNewArrival": false,
+      "isTopSelling": true
+    },
+    {
+      "id": "8",
+      "name": "Faded Skinny Jeans",
+      "price": 210,
+      "description": "Stylish faded skinny jeans with a stretchable fabric for all-day comfort.",
+      "category": "Jeans",
+      "brand": "DenimCo",
+      "stock": 22,
+      "colors": [
+        "Blue",
+        "Dark Gray"
+      ],
+      "sizes": [
+        "28",
+        "30",
+        "32",
+        "34",
+        "36"
+      ],
+      "images": [
+        "https://image.hm.com/assets/hm/50/d7/50d7b1f665474cdc57c76d418b16b1ed7d489946.jpg?imwidth=1260",
+        "https://image.hm.com/assets/hm/a1/eb/a1eb4df1bac12aa1f7c1684bb78c191fd90ed286.jpg?imwidth=1260"
+      ],
+      "rating": 4.5,
+      "isNewArrival": false,
+      "isTopSelling": true
+    },
+    {
+      "id": "9",
+      "name": "Classic Polo Shirt",
+      "price": 150,
+      "description": "Timeless polo shirt with soft cotton fabric, perfect for casual wear.",
+      "category": "T-Shirt",
+      "brand": "EliteStyle",
+      "stock": 27,
+      "colors": [
+        "Navy",
+        "White",
+        "Green"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "images": [
+        "https://static.zara.net/assets/public/4596/7a87/d53345b2a64c/15a6bf6fe7bf/06674322704-e1/06674322704-e1.jpg?ts=1756121712654&w=750",
+        "https://static.zara.net/assets/public/4596/7a87/d53345b2a64c/15a6bf6fe7bf/06674322704-e1/06674322704-e1.jpg?ts=1756121712654&w=750"
+      ],
+      "rating": 4.3,
+      "isNewArrival": true,
+      "isTopSelling": false
+    },
+    {
+      "id": "10",
+      "name": "Denim Jacket",
+      "price": 350,
+      "description": "Classic blue denim jacket with button closure and chest pockets.",
+      "category": "Jacket",
+      "brand": "DenimCo",
+      "stock": 15,
+      "colors": [
+        "Blue"
+      ],
+      "sizes": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "images": [
+        "https://static.zara.net/assets/public/f2c7/db2a/934d4cc1b53c/16845caedff2/06987302730-e1/06987302730-e1.jpg?ts=1756715349941&w=750",
+        "https://static.zara.net/assets/public/f2c7/db2a/934d4cc1b53c/16845caedff2/06987302730-e1/06987302730-e1.jpg?ts=1756715349941&w=750"
+      ],
+      "rating": 4.7,
+      "isNewArrival": true,
+      "isTopSelling": true
+    },
+    {
+      "id": "11",
+      "name": "Slim Fit Chinos",
+      "price": 200,
+      "description": "Versatile slim-fit chinos suitable for casual and semi-formal outfits.",
+      "category": "Pants",
+      "brand": "UrbanWear",
+      "stock": 32,
+      "colors": [
+        "Beige",
+        "Navy",
+        "Olive"
+      ],
+      "sizes": [
+        "30",
+        "32",
+        "34",
+        "36"
+      ],
+      "images": [
+        "https://image.hm.com/assets/hm/c2/c5/c2c516da48299eb461b9a16365d7fdd08cf7dd85.jpg?imwidth=1260",
+        "https://image.hm.com/assets/hm/c2/c5/c2c516da48299eb461b9a16365d7fdd08cf7dd85.jpg?imwidth=1260"
+      ],
+      "rating": 4.6,
+      "isNewArrival": false,
+      "isTopSelling": true
+    },
+    {
+      "id": "12",
+      "name": "Hooded Sweatshirt",
+      "price": 220,
+      "description": "Cozy hooded sweatshirt with kangaroo pocket and soft fleece lining.",
+      "category": "Hoodie",
+      "brand": "StreetMode",
+      "stock": 29,
+      "colors": [
+        "Gray",
+        "Black",
+        "Maroon"
+      ],
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "images": [
+        "https://static.zara.net/assets/public/304c/1a23/b4cc4ead9289/003f403d90e9/01437360529-e1/01437360529-e1.jpg?ts=1756300878555&w=750",
+        "https://static.zara.net/assets/public/304c/1a23/b4cc4ead9289/003f403d90e9/01437360529-e1/01437360529-e1.jpg?ts=1756300878555&w=750"
+      ],
+      "rating": 4.8,
+      "isNewArrival": true,
+      "isTopSelling": false
+    }
+  ],
+  "brands": [
+    {
+      "id": "1",
+      "name": "Prada",
+      "logo": "https://logos-world.net/wp-content/uploads/2020/05/Prada-Symbol-700x394.png"
+    },
+    {
+      "id": "2",
+      "name": "Zara",
+      "logo": "https://logos-world.net/wp-content/uploads/2020/05/Zara-Logo-2008-2019-700x394.png"
+    },
+    {
+      "id": "3",
+      "name": "L'Oréal",
+      "logo": "https://logos-world.net/wp-content/uploads/2020/04/LOreal-Logo-700x394.png"
+    },
+    {
+      "id": "4",
+      "name": "Christian Dior",
+      "logo": "https://logos-world.net/wp-content/uploads/2021/08/Christian-Dior-Logo-700x394.png"
+    },
+    {
+      "id": "5",
+      "name": "Calvin Klein",
+      "logo": "https://logos-world.net/wp-content/uploads/2020/05/Calvin-Klein-Logo-700x394.png"
+    }
+  ]
+}
