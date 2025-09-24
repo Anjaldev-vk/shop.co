@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
+import { AuthContext } from "../context/AuthContext";
 
 const WishlistPage = () => {
+  const { currentUser, loading } = useContext(AuthContext);
   const { wishlist, removeFromWishlist } = useWishlist();
   const { addToCart } = useCart();
   const navigate = useNavigate();
+
+  // wait until auth state is loaded
+  if (loading) {
+    return <div className="text-center mt-20">Loading...</div>;
+  }
+
+  // redirect if not logged in
+  if (!currentUser) {
+    navigate("/login");
+    return null;
+  }
 
   const handleAddToCart = (product) => {
     addToCart(product);

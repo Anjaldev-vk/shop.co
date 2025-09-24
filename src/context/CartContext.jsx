@@ -1,10 +1,13 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { AuthContext } from "./AuthContext"; // import AuthContext
+import { useContext as useAuthContext } from "react";
 
 const CartContext = createContext();
-
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
+  const { currentUser } = useAuthContext(AuthContext); // get logged-in user
+
   const [cart, setCart] = useState(() => {
     // Load cart from localStorage
     const storedCart = localStorage.getItem("cart");
@@ -16,6 +19,11 @@ export const CartProvider = ({ children }) => {
   }, [cart]);
 
   const addToCart = (product) => {
+    if (!currentUser) {
+      alert("You need to log in first!");
+      return;
+    }
+
     setCart((prev) => {
       const existing = prev.find((item) => item.id === product.id);
       if (existing) {
@@ -31,6 +39,11 @@ export const CartProvider = ({ children }) => {
   };
 
   const decrementCartItem = (productId) => {
+    if (!currentUser) {
+      alert("You need to log in first!");
+      return;
+    }
+
     setCart((prev) =>
       prev
         .map((item) =>
@@ -38,15 +51,25 @@ export const CartProvider = ({ children }) => {
             ? { ...item, quantity: item.quantity - 1 }
             : item
         )
-        .filter((item) => item.quantity > 0) // remove if quantity reaches 0
+        .filter((item) => item.quantity > 0)
     );
   };
 
   const removeFromCart = (id) => {
+    if (!currentUser) {
+      alert("You need to log in first!");
+      return;
+    }
     setCart((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const clearCart = () => setCart([]);
+  const clearCart = () => {
+    if (!currentUser) {
+      alert("You need to log in first!");
+      return;
+    }
+    setCart([]);
+  };
 
   return (
     <CartContext.Provider

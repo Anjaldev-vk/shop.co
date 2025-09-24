@@ -4,27 +4,42 @@
       "id": "1",
       "username": "user",
       "password": "password",
-      "role": "user"
+      "role": "user",
+      "profilePhoto": "https://example.com/profile_photos/user1.jpg",
+      "cart": [
+        { "productId": "1", "quantity": 2 },
+        { "productId": "5", "quantity": 1 }
+      ],
+      "wishlist": ["2", "8"]
     },
     {
       "id": "2",
       "username": "admin",
       "password": "admin_password",
-      "role": "admin"
+      "role": "admin",
+      "profilePhoto": "https://example.com/profile_photos/admin.jpg",
+      "cart": [],
+      "wishlist": []
     },
     {
       "id": "3",
       "username": "Anjal",
       "email": "gamexanjalx@gmail.com",
       "password": "654321",
-      "role": "user"
+      "role": "user",
+      "profilePhoto": null,
+      "cart": [],
+      "wishlist": []
     },
     {
       "id": 4,
       "username": "anjal dev",
       "email": "mkmanjal@gmail.com",
       "password": "123456",
-      "role": "user"
+      "role": "user",
+      "profilePhoto": null,
+      "cart": [],
+      "wishlist": []
     }
   ],
   "products": [
