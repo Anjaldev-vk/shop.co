@@ -1,164 +1,129 @@
-// // src/pages/Login.js
-// import React, { useState, useContext } from "react";
-// import { useNavigate } from "react-router-dom";
-// import axios from "axios";
-// import { AuthContext } from "../../context/AuthContext";
-
-// const Login = () => {
-//   const [username, setUsername] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [error, setError] = useState("");
-//   const { login } = useContext(AuthContext);
-//   const navigate = useNavigate();
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     try {
-//       // Fetch user from JSON server
-//       const res = await axios.get(
-//         `http://localhost:3001/users?username=${username}&password=${password}`
-//       );
-
-//       if (res.data.length === 0) {
-//         setError("Invalid username or password");
-//         return;
-//       }
-
-//       const user = res.data[0];
-//       login(user); // update context + localStorage immediately
-//       navigate("/profile"); // redirect to protected profile page
-//     } catch (err) {
-//       console.error(err);
-//       setError("Something went wrong");
-//     }
-//   };
-
-//   return (
-//     <div className="max-w-md mx-auto mt-20 p-6 border rounded shadow">
-//       <h2 className="text-2xl mb-4">Login</h2>
-//       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-//         <input
-//           type="text"
-//           placeholder="Username"
-//           value={username}
-//           onChange={(e) => setUsername(e.target.value)}
-//           className="p-2 border rounded"
-//         />
-//         <input
-//           type="password"
-//           placeholder="Password"
-//           value={password}
-//           onChange={(e) => setPassword(e.target.value)}
-//           className="p-2 border rounded"
-//         />
-//         <button type="submit" className="bg-blue-600 text-white p-2 rounded">
-//           Login
-//         </button>
-//         {error && <p className="text-red-500">{error}</p>}
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default Login;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// src/pages/Login.js
-// src/pages/Login.js
 import React, { useState, useContext } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // toggle password
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Get the page user tried to visit (default to /profile)
   const from = location.state?.from?.pathname || "/profile";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!username || !password) {
+      setError("Please enter both username and password.");
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+
     try {
-      // Fetch user from JSON server
-      const res = await axios.get(
-        `http://localhost:3001/users?username=${username}&password=${password}`
-      );
-
-      if (res.data.length === 0) {
-        setError("Invalid username or password");
-        return;
-      }
-
-      const user = res.data[0];
-      login(user); // update context + localStorage immediately
-
-      // Redirect to the page the user originally wanted
+      await login(username, password);
       navigate(from, { replace: true });
     } catch (err) {
+      setError(err.message || "Invalid credentials. Please try again.");
       console.error(err);
-      setError("Something went wrong");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-20 p-6 border rounded shadow">
-      <h2 className="text-2xl mb-4">Login</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="p-2 border rounded"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="p-2 border rounded"
-        />
-        <button type="submit" className="bg-blue-600 text-white p-2 rounded">
-          Login
-        </button>
-        {error && <p className="text-red-500">{error}</p>}
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-indigo-100 py-12 px-4">
+      <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-10">
+        <h2 className="text-4xl font-bold text-center text-indigo-700 mb-8">
+          Welcome Back
+        </h2>
 
-      {/* Sign Up Option */}
-      <p className="mt-4 text-center text-gray-700">
-        Don't have an account?{" "}
-        <Link to="/signup" className="text-blue-600 hover:underline">
-          Sign Up
-        </Link>
-      </p>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Username */}
+          <div className="relative">
+            <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-indigo-400" />
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full py-3 pl-12 pr-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300 shadow-sm"
+              required
+            />
+          </div>
+
+          {/* Password */}
+          <div className="relative">
+            <LockIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-indigo-400" />
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full py-3 pl-12 pr-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300 shadow-sm"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-indigo-600 focus:outline-none"
+            >
+              {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+            </button>
+          </div>
+
+          {error && (
+            <p className="text-red-500 text-sm text-center animate-pulse">{error}</p>
+          )}
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 disabled:bg-indigo-400 transition-all duration-300 shadow-md"
+          >
+            {isLoading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-gray-500">
+          Don't have an account?{" "}
+          <Link to="/signup" className="text-indigo-600 font-semibold hover:underline">
+            Sign Up
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };
 
-export default Login;
+// Icons
+const UserIcon = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+  </svg>
+);
 
+const LockIcon = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+  </svg>
+);
+
+const EyeIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+  </svg>
+);
+
+const EyeOffIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.053 10.053 0 012.155-3.344M6.364 6.364A9.966 9.966 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.978 9.978 0 01-1.12 2.034M3 3l18 18" />
+  </svg>
+);
+
+export default Login;
