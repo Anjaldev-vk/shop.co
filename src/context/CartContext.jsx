@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext, useEffect, useCallback } from "react";
+import React, { createContext, useState, useContext, useEffect, useCallback, useMemo } from "react";
+import toast from 'react-hot-toast'; // ✅ Import toast for notifications
 import { AuthContext } from "./AuthContext";
 
 const CartContext = createContext();
@@ -16,10 +17,8 @@ export const CartProvider = ({ children }) => {
       setLoading(false);
       return;
     }
-
     setLoading(true);
     try {
-      // Step 1: Fetch the user's cart data (contains productId and quantity)
       const userResponse = await fetch(`http://localhost:3001/users/${currentUser.id}`);
       if (!userResponse.ok) throw new Error("Could not fetch user data.");
       
@@ -28,27 +27,24 @@ export const CartProvider = ({ children }) => {
 
       if (userCartData.length === 0) {
         setCart([]);
-        setLoading(false);
         return;
       }
 
-      // Step 2: Fetch the full details for each product in the cart
       const productPromises = userCartData.map(item =>
         fetch(`http://localhost:3001/products/${item.productId}`).then(res => res.json())
       );
       
       const productDetails = await Promise.all(productPromises);
 
-      // Step 3: Merge product details with quantities to form the final cart state
       const mergedCart = productDetails.map(product => ({
         ...product,
-        quantity: userCartData.find(item => item.productId === product.id)?.quantity || 0,
-      }));
+        quantity: userCartData.find(item => item.productId === String(product.id))?.quantity || 0,
+      })).filter(item => item.quantity > 0); // Ensure no items with 0 quantity are added
 
       setCart(mergedCart);
-
     } catch (error) {
       console.error("Failed to fetch cart:", error);
+      toast.error("Could not load your cart."); // ✅ Notify user on fetch failure
       setCart([]);
     } finally {
       setLoading(false);
@@ -59,7 +55,6 @@ export const CartProvider = ({ children }) => {
     fetchCartDetails();
   }, [fetchCartDetails]);
 
-  // Generic function to update the cart on the server
   const updateServerCart = async (newCartData) => {
     if (!currentUser) return null;
     try {
@@ -68,76 +63,96 @@ export const CartProvider = ({ children }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cart: newCartData }),
       });
+      if (!response.ok) throw new Error("Server update failed.");
       return response.json();
     } catch (error) {
       console.error("Failed to update cart on server:", error);
       return null;
     }
   };
+  
+  const formatCartForServer = (cartState) => cartState.map(({ id, quantity }) => ({ productId: String(id), quantity }));
 
-  const addToCart = async (product) => {
+  const addToCart = async (product, quantityToAdd = 1) => {
+    if (!currentUser) {
+      toast.error("Please log in to add items to your cart.");
+      return;
+    }
+    const originalCart = [...cart];
     const existingItem = cart.find((item) => item.id === product.id);
     let newCart;
 
     if (existingItem) {
       newCart = cart.map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        item.id === product.id ? { ...item, quantity: item.quantity + quantityToAdd } : item
       );
     } else {
-      newCart = [...cart, { ...product, quantity: 1 }];
+      newCart = [...cart, { ...product, quantity: quantityToAdd }];
     }
     
-    setCart(newCart); // Optimistic UI update
+    setCart(newCart);
+    toast.success(`${quantityToAdd} x ${product.name} added to cart!`); // ✅ Notify user
 
-    const newCartData = newCart.map(({ id, quantity }) => ({ productId: id, quantity }));
-    await updateServerCart(newCartData);
+    const serverResult = await updateServerCart(formatCartForServer(newCart));
+    if (!serverResult) {
+      setCart(originalCart);
+      toast.error("Failed to update cart. Please try again."); // ✅ Notify user on failure
+    }
   };
 
   const decrementCartItem = async (productId) => {
+    const originalCart = [...cart];
     const existingItem = cart.find((item) => item.id === productId);
     if (!existingItem) return;
 
-    let newCart;
-    if (existingItem.quantity === 1) {
-      // Remove item if quantity becomes 0
-      newCart = cart.filter((item) => item.id !== productId);
-    } else {
-      newCart = cart.map((item) =>
-        item.id === productId ? { ...item, quantity: item.quantity - 1 } : item
-      );
+    const newCart =
+      existingItem.quantity === 1
+        ? cart.filter((item) => item.id !== productId)
+        : cart.map((item) =>
+            item.id === productId ? { ...item, quantity: item.quantity - 1 } : item
+          );
+
+    setCart(newCart);
+    // No toast here as UI changes are immediate and clear
+
+    const serverResult = await updateServerCart(formatCartForServer(newCart));
+    if (!serverResult) {
+      setCart(originalCart);
+      toast.error("Failed to update item quantity."); // ✅ Notify user on failure
     }
-
-    setCart(newCart); // Optimistic UI update
-
-    const newCartData = newCart.map(({ id, quantity }) => ({ productId: id, quantity }));
-    await updateServerCart(newCartData);
   };
 
   const removeFromCart = async (productId) => {
+    const productName = cart.find(item => item.id === productId)?.name || 'Item';
+    const originalCart = [...cart];
     const newCart = cart.filter((item) => item.id !== productId);
-    setCart(newCart); // Optimistic UI update
+    
+    setCart(newCart);
+    toast.error(`${productName} removed from cart.`); // ✅ Notify user
 
-    const newCartData = newCart.map(({ id, quantity }) => ({ productId: id, quantity }));
-    await updateServerCart(newCartData);
+    const serverResult = await updateServerCart(formatCartForServer(newCart));
+    if (!serverResult) {
+      setCart(originalCart);
+      toast.error("Failed to remove item. Please try again."); // ✅ Notify user on failure
+    }
   };
 
   const clearCart = async () => {
-    setCart([]); // Optimistic UI update
-    await updateServerCart([]);
+    const originalCart = [...cart];
+    setCart([]);
+    toast.success("Cart has been cleared."); // ✅ Notify user
+    
+    const serverResult = await updateServerCart([]);
+    if (!serverResult) {
+      setCart(originalCart);
+      toast.error("Could not clear cart. Please try again."); // ✅ Notify user on failure
+    }
   };
 
-  const value = {
-    cart,
-    addToCart,
-    decrementCartItem,
-    removeFromCart,
-    clearCart,
-    loading,
-  };
+  const cartItemCount = useMemo(() => cart.reduce((count, item) => count + item.quantity, 0), [cart]);
+  const cartTotal = useMemo(() => cart.reduce((total, item) => total + (item.discountedPrice || item.price || 0) * item.quantity, 0), [cart]);
 
-  return (
-    <CartContext.Provider value={value}>
-      {children}
-    </CartContext.Provider>
-  );
+  const value = { cart, addToCart, decrementCartItem, removeFromCart, clearCart, loading, cartItemCount, cartTotal };
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };

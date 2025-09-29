@@ -1,34 +1,10 @@
 {
   "users": [
     {
-      "id": "1",
-      "username": "user",
-      "password": "password",
-      "role": "user",
-      "isBlock": false,
-      "profilePhoto": "https://example.com/profile_photos/user1.jpg",
-      "cart": [
-        {
-          "productId": "1",
-          "quantity": 2
-        },
-        {
-          "productId": "5",
-          "quantity": 1
-        }
-      ],
-      "orders": [],
-      "wishlist": [
-        "2",
-        "8"
-      ],
-      "created_at": "2025-09-24T11:00:00Z"
-    },
-    {
       "id": "2",
       "username": "admin",
       "email": "admin@example.com",
-      "password": "admin_password",
+      "password": "admin",
       "role": "admin",
       "isBlock": false,
       "profilePhoto": "https://example.com/profile_photos/admin.jpg",
@@ -47,16 +23,20 @@
       "profilePhoto": null,
       "cart": [
         {
-          "productId": "2",
+          "productId": "10",
+          "quantity": 3
+        },
+        {
+          "productId": "7",
           "quantity": 1
         }
       ],
       "orders": [],
       "wishlist": [
-        "2",
-        "5",
+        "3",
         "6",
-        "7"
+        "9",
+        "855f"
       ],
       "created_at": "2025-09-24T11:00:00Z"
     },
@@ -81,13 +61,66 @@
       "role": "user",
       "isBlock": false,
       "profilePhoto": null,
-      "cart": [],
+      "cart": [
+        {
+          "productId": "1",
+          "quantity": 2
+        },
+        {
+          "productId": "2",
+          "quantity": 1
+        }
+      ],
+      "orders": [],
+      "wishlist": [],
+      "created_at": "2025-09-25T08:35:04.102Z"
+    },
+    {
+      "id": "3f96",
+      "username": "gokul",
+      "email": "gokul@gmail.com",
+      "password": "vghbfty",
+      "role": "user",
+      "isBlock": false,
+      "profilePhoto": null,
+      "cart": [
+        {
+          "productId": "2",
+          "quantity": 1
+        },
+        {
+          "productId": "7",
+          "quantity": 1
+        }
+      ],
+      "orders": [],
+      "wishlist": [
+        "3",
+        "4",
+        "2"
+      ],
+      "created_at": "2025-09-26T10:40:04.071Z"
+    },
+    {
+      "id": "429f",
+      "username": "yadu",
+      "email": "yadhukrishnangta@gmail.com",
+      "password": "123456",
+      "role": "user",
+      "isBlock": false,
+      "profilePhoto": null,
+      "cart": [
+        {
+          "productId": "3",
+          "quantity": 1
+        }
+      ],
       "orders": [],
       "wishlist": [
         "2",
-        "1"
+        "3"
       ],
-      "created_at": "2025-09-25T08:35:04.102Z"
+      "created_at": "2025-09-29T09:29:13.495Z"
     }
   ],
   "products": [
@@ -95,7 +128,7 @@
       "id": "1",
       "name": "T-shirt with Tape Details",
       "description": "Comfortable cotton t-shirt with modern tape detailing on the sleeves.",
-      "price": 120,
+      "price": 1200,
       "count": 25,
       "category": "T-Shirt",
       "images": [
@@ -125,7 +158,7 @@
       "name": "Skinny Fit Jeans",
       "description": "Slim-fit jeans with a modern stretch for comfort and style.",
       "price": 240,
-      "count": 40,
+      "count": 30,
       "category": "Jeans",
       "images": [
         "https://image.hm.com/assets/hm/a1/eb/a1eb4df1bac12aa1f7c1684bb78c191fd90ed286.jpg?imwidth=1260",
@@ -154,7 +187,7 @@
       "name": "Checkered Shirt",
       "description": "Classic checkered shirt, perfect for casual and semi-formal outings.",
       "price": 180,
-      "count": 30,
+      "count": 29,
       "category": "Shirt",
       "images": [
         "https://image.hm.com/assets/hm/84/de/84de62aceda9354cd420b837c82f44a85cf6b36d.jpg?imwidth=1260",
@@ -427,6 +460,60 @@
         "XL",
         "XXL"
       ]
+    },
+    {
+      "id": "46b7",
+      "name": "Regular Fit Shirt",
+      "price": 2099,
+      "count": 0,
+      "category": "Shirt",
+      "brand": "H&M",
+      "description": "Shirt in a soft weave with a turn-down collar, classic front, yoke at the back and an open chest pocket. Long sleeves with buttoned cuffs and a sleeve placket with a link button. Gently rounded hem. Regular fit for comfortable wear and a classic silhouette.",
+      "images": [
+        "https://image.hm.com/assets/hm/16/fb/16fb41d8383ed439b556ed869e8287aee427bd60.jpg?imwidth=1260"
+      ],
+      "rating": 4.5,
+      "isNewArrival": true,
+      "isTopSelling": false,
+      "created_at": "2025-09-29T03:58:28.818Z",
+      "colors": [],
+      "sizes": []
+    },
+    {
+      "id": "855f",
+      "name": "Regular Fit Resort shirt",
+      "price": 2099,
+      "count": 0,
+      "category": "Shirt",
+      "brand": "H&M",
+      "description": "Short-sleeved shirt in a soft weave with a resort collar, French front and an open chest pocket. Straight-cut hem with a small slit on each side. Regular fit for comfortable wear and a classic silhouette.",
+      "images": [
+        "https://image.hm.com/assets/hm/62/88/62888de3c1e8822a2c503d53f029a49afb706229.jpg?imwidth=1260"
+      ],
+      "rating": 4.5,
+      "isNewArrival": true,
+      "isTopSelling": false,
+      "created_at": "2025-09-29T04:09:02.205Z",
+      "colors": [],
+      "sizes": []
+    },
+    {
+      "id": "3f67",
+      "name": "Loose Jeans",
+      "price": 1799,
+      "count": 6,
+      "category": "Jeans",
+      "brand": "H&M",
+      "description": "5-pocket jeans in rigid cotton denim with a rounded leg and a loose fit from the seat to the hem with a dropped crotch and extra room around the whole leg. Regular waist and a zip fly. These will be your new favourites.",
+      "images": [
+        "https://image.hm.com/assets/hm/bd/ab/bdab4f200e36a1c4c723fcc2d3d9cf48c92e5b23.jpg?imwidth=1260"
+      ],
+      "rating": 4.5,
+      "isNewArrival": true,
+      "isTopSelling": false,
+      "created_at": "2025-09-29T04:13:36.398Z",
+      "colors": [],
+      "sizes": []
     }
   ],
   "brands": [
@@ -454,6 +541,335 @@
       "id": "5",
       "name": "Calvin Klein",
       "logo": "https://logos-world.net/wp-content/uploads/2020/05/Calvin-Klein-Logo-700x394.png"
+    }
+  ],
+  "orders": [
+    {
+      "id": "bc5c",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "3",
+          "name": "Checkered Shirt",
+          "price": 180,
+          "quantity": 2
+        }
+      ],
+      "total": 378,
+      "orderDate": "2025-09-26T04:55:54.151Z",
+      "status": "Delivered"
+    },
+    {
+      "id": "2796",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "7",
+          "name": "Loose Fit Bermuda Shorts",
+          "price": 90,
+          "quantity": 1
+        }
+      ],
+      "total": 94.5,
+      "orderDate": "2025-09-26T05:08:09.496Z",
+      "status": "Delivered"
+    },
+    {
+      "id": "5582",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "1",
+          "name": "T-shirt with Tape Details",
+          "price": 120,
+          "quantity": 1,
+          "image": "https://image.hm.com/assets/hm/05/66/05664a801dd930fcfcee8bc419221598e426794b.jpg?imwidth=1260"
+        }
+      ],
+      "total": 126,
+      "orderDate": "2025-09-26T05:10:03.271Z",
+      "status": "Delivered"
+    },
+    {
+      "id": "74cb",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "6",
+          "name": "Courage Graphic T-shirt",
+          "price": 145,
+          "quantity": 1,
+          "image": "https://image.hm.com/assets/hm/48/6c/486cc2060e359564510bc0d33702e374d325c67a.jpg?imwidth=1260"
+        }
+      ],
+      "total": 152.25,
+      "orderDate": "2025-09-26T05:10:33.558Z",
+      "status": "Delivered"
+    },
+    {
+      "id": "ca9d",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "3",
+          "name": "Checkered Shirt",
+          "price": 180,
+          "quantity": 1,
+          "image": "https://image.hm.com/assets/hm/84/de/84de62aceda9354cd420b837c82f44a85cf6b36d.jpg?imwidth=1260"
+        },
+        {
+          "id": "2",
+          "name": "Skinny Fit Jeans",
+          "price": 240,
+          "quantity": 7,
+          "image": "https://image.hm.com/assets/hm/a1/eb/a1eb4df1bac12aa1f7c1684bb78c191fd90ed286.jpg?imwidth=1260"
+        }
+      ],
+      "total": 1953,
+      "orderDate": "2025-09-26T09:17:20.202Z",
+      "status": "Delivered"
+    },
+    {
+      "id": "11cd",
+      "userId": "3f96",
+      "customerInfo": {
+        "name": "gokul",
+        "email": "gokul@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "cod"
+      },
+      "items": [
+        {
+          "id": "1",
+          "name": "T-shirt with Tape Details",
+          "price": 120,
+          "quantity": 1,
+          "image": "https://image.hm.com/assets/hm/05/66/05664a801dd930fcfcee8bc419221598e426794b.jpg?imwidth=1260"
+        }
+      ],
+      "total": 126,
+      "orderDate": "2025-09-26T10:40:30.492Z",
+      "status": "Delivered"
+    },
+    {
+      "id": "5532",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "2",
+          "name": "Skinny Fit Jeans",
+          "price": 240,
+          "quantity": 2,
+          "image": "https://image.hm.com/assets/hm/a1/eb/a1eb4df1bac12aa1f7c1684bb78c191fd90ed286.jpg?imwidth=1260"
+        }
+      ],
+      "total": 504,
+      "orderDate": "2025-09-27T04:40:29.897Z",
+      "status": "Cancelled"
+    },
+    {
+      "id": "524a",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "12",
+          "name": "Hooded Sweatshirt",
+          "price": 220,
+          "quantity": 30,
+          "image": "https://static.zara.net/assets/public/304c/1a23/b4cc4ead9289/003f403d90e9/01437360529-e1/01437360529-e1.jpg?ts=1756300878555&w=750"
+        }
+      ],
+      "total": 6930,
+      "orderDate": "2025-09-27T05:01:02.735Z",
+      "status": "Shipped"
+    },
+    {
+      "id": "7a12",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "3",
+          "name": "Checkered Shirt",
+          "price": 180,
+          "quantity": 3,
+          "image": "https://image.hm.com/assets/hm/84/de/84de62aceda9354cd420b837c82f44a85cf6b36d.jpg?imwidth=1260"
+        },
+        {
+          "id": "2",
+          "name": "Skinny Fit Jeans",
+          "price": 240,
+          "quantity": 1,
+          "image": "https://image.hm.com/assets/hm/a1/eb/a1eb4df1bac12aa1f7c1684bb78c191fd90ed286.jpg?imwidth=1260"
+        },
+        {
+          "id": "46b7",
+          "name": "Regular Fit Shirt",
+          "price": 2099,
+          "quantity": 5,
+          "image": "https://image.hm.com/assets/hm/16/fb/16fb41d8383ed439b556ed869e8287aee427bd60.jpg?imwidth=1260"
+        }
+      ],
+      "total": 11838.75,
+      "orderDate": "2025-09-29T07:13:08.864Z",
+      "status": "Pending"
+    },
+    {
+      "id": "8a30",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "46b7",
+          "name": "Regular Fit Shirt",
+          "price": 2099,
+          "quantity": 5,
+          "image": "https://image.hm.com/assets/hm/16/fb/16fb41d8383ed439b556ed869e8287aee427bd60.jpg?imwidth=1260"
+        }
+      ],
+      "total": 11019.75,
+      "orderDate": "2025-09-29T07:13:36.632Z",
+      "status": "Pending"
+    },
+    {
+      "id": "91e7",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "855f",
+          "name": "Regular Fit Resort shirt",
+          "price": 2099,
+          "quantity": 3,
+          "image": "https://image.hm.com/assets/hm/62/88/62888de3c1e8822a2c503d53f029a49afb706229.jpg?imwidth=1260"
+        }
+      ],
+      "total": 6611.85,
+      "orderDate": "2025-09-29T07:17:18.626Z",
+      "status": "Pending"
+    },
+    {
+      "id": "85d3",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "46b7",
+          "name": "Regular Fit Shirt",
+          "price": 2099,
+          "quantity": 10,
+          "image": "https://image.hm.com/assets/hm/16/fb/16fb41d8383ed439b556ed869e8287aee427bd60.jpg?imwidth=1260"
+        }
+      ],
+      "total": 22039.5,
+      "orderDate": "2025-09-29T07:50:48.337Z",
+      "status": "Pending"
+    },
+    {
+      "id": "bca1",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "sdfghjk",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "46b7",
+          "name": "Regular Fit Shirt",
+          "price": 2099,
+          "quantity": 5,
+          "image": "https://image.hm.com/assets/hm/16/fb/16fb41d8383ed439b556ed869e8287aee427bd60.jpg?imwidth=1260"
+        }
+      ],
+      "total": 11019.75,
+      "orderDate": "2025-09-29T07:52:52.031Z",
+      "status": "Pending"
+    },
+    {
+      "id": "8715",
+      "userId": "429f",
+      "customerInfo": {
+        "name": "yadu",
+        "email": "yadhukrishnangta@gmail.com",
+        "address": "koduvally",
+        "paymentMethod": "cod"
+      },
+      "items": [
+        {
+          "id": "3",
+          "name": "Checkered Shirt",
+          "price": 180,
+          "quantity": 1,
+          "image": "https://image.hm.com/assets/hm/84/de/84de62aceda9354cd420b837c82f44a85cf6b36d.jpg?imwidth=1260"
+        }
+      ],
+      "total": 189,
+      "orderDate": "2025-09-29T09:29:57.599Z",
+      "status": "Pending"
     }
   ]
 }

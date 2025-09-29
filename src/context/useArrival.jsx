@@ -8,7 +8,7 @@ const useNewArrivals = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/products?isNewArrival=true") // fetching only new arrivals
+    axios.get("http://localhost:3001/products?isNewArrival=true")
       .then(res => setNewArrivals(res.data))
       .catch(err => setError(err))
       .finally(() => setLoading(false));

@@ -36,10 +36,10 @@ const Cart = () => {
             <div className="ml-4 flex-1">
               <h3 className="text-lg font-semibold">{item.name || "Unnamed Product"}</h3>
               <p className="text-gray-600">
-                Price: ${Number(getItemPrice(item)).toFixed(2)} × {item.quantity || 1}
+                Price: {Number(getItemPrice(item)).toFixed(2)} × {item.quantity || 1}₹
               </p>
               <p className="text-gray-800 font-bold">
-                Total: ${(getItemPrice(item) * (item.quantity || 1)).toFixed(2)}
+                Total: {(getItemPrice(item) * (item.quantity || 1)).toFixed(2)}₹
               </p>
 
               {/* Increment / Decrement Buttons */}
@@ -81,7 +81,7 @@ const Cart = () => {
 
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto justify-between md:justify-end">
           <p className="text-xl font-bold text-gray-800">
-            Total: ${calculateTotal()}
+            Total: {calculateTotal()}₹
           </p>
           <button
             onClick={() => navigate("/checkout")}

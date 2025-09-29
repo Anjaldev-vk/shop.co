@@ -7,20 +7,35 @@ import { useWishlist } from "../../context/WishlistContext";
 const ProductDetails = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
-  const { addToWishlist } = useWishlist();
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const navigate = useNavigate();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [wishlistAdded, setWishlistAdded] = useState(false);
+  const [quantity, setQuantity] = useState(1);
   const [toastMessage, setToastMessage] = useState("");
 
+  const isInWishlist = product
+    ? wishlist.some((item) => item.id === product.id)
+    : false;
+
+  const isOutOfStock = product && product.count <= 0;
+
   useEffect(() => {
+    if (!id) {
+      setError("No product ID provided.");
+      setLoading(false);
+      return;
+    }
+
     const fetchProduct = async () => {
+      setLoading(true);
+      setProduct(null);
       try {
         const response = await axios.get(`http://localhost:3001/products/${id}`);
         setProduct(response.data);
+        setError(null);
       } catch (err) {
         setError("Failed to fetch product details.");
         console.error(err);
@@ -28,6 +43,7 @@ const ProductDetails = () => {
         setLoading(false);
       }
     };
+    
     fetchProduct();
   }, [id]);
 
@@ -39,149 +55,157 @@ const ProductDetails = () => {
   };
 
   const handleAddToCart = () => {
-    addToCart(product);
-    showToast(`${product.name} added to cart!`);
+    if (!product || isOutOfStock) return;
+    addToCart(product, quantity);
+    showToast(`${quantity} x ${product.name} added to cart!`);
   };
 
   const handleBuyNow = () => {
-    addToCart(product);
-    navigate("/cart");
+    if (!product || isOutOfStock) return;
+    addToCart(product, quantity);
+    navigate("/checkout");
   };
 
-  const handleAddToWishlist = () => {
-    if (!wishlistAdded) {
+  const handleToggleWishlist = () => {
+    if (!product) return;
+    if (isInWishlist) {
+      removeFromWishlist(product.id);
+      showToast(`${product.name} removed from wishlist!`);
+    } else {
       addToWishlist(product);
-      setWishlistAdded(true);
       showToast(`${product.name} added to wishlist!`);
     }
   };
 
-  if (loading)
-    return (
-      <div className="flex justify-center items-center min-h-screen text-lg font-semibold text-gray-600">
-        Loading product details...
-      </div>
-    );
+  if (loading) {
+    return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+  }
 
-  if (error)
-    return (
-      <div className="flex justify-center items-center min-h-screen text-red-500 font-semibold">
-        {error}
-      </div>
-    );
+  if (error) {
+    return <div className="flex justify-center items-center min-h-screen text-red-500">{error}</div>;
+  }
 
-  if (!product)
-    return (
-      <div className="flex justify-center items-center min-h-screen text-gray-600 font-semibold">
-        Product not found.
-      </div>
-    );
+  if (!product) {
+    return <div className="flex justify-center items-center min-h-screen">Product not found.</div>;
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex justify-center items-center py-10 px-4">
-      {/* Toast Notification */}
+    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       {toastMessage && (
-        <div className="fixed top-20 right-5 bg-white text-gray-900 px-6 py-3 rounded-xl shadow-lg z-50 border animate-slide-in-out">
+        <div className="fixed top-24 right-5 bg-white text-gray-900 px-6 py-3 rounded-xl shadow-lg z-50 border animate-slide-in-out">
           ✅ {toastMessage}
         </div>
       )}
-
-      <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-3xl flex flex-col md:flex-row gap-8 border border-gray-200">
-        {/* Product Image */}
-        <div className="md:w-1/2 flex items-center justify-center">
-          <img
-            src={product.images?.[0] || "https://via.placeholder.com/400x400?text=No+Image"}
-            alt={product.name}
-            className="w-full h-96 object-contain rounded-xl bg-gray-100 p-4"
-          />
-        </div>
-
-        {/* Product Info */}
-        <div className="md:w-1/2 flex flex-col justify-between">
-          <div>
-            <h1 className="text-3xl font-extrabold text-gray-900 mb-2">{product.name}</h1>
-            {product.brand && (
-              <p className="text-gray-500 text-lg mb-4 font-medium">{product.brand}</p>
-            )}
-
-            {/* Rating */}
-            {product.rating && (
-              <div className="flex items-center mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-xl">
-                    {i < Math.floor(product.rating) ? "★" : "☆"}
-                  </span>
-                ))}
-                <span className="ml-3 text-gray-600 text-sm font-medium">
-                  {product.rating}/5
-                </span>
-              </div>
-            )}
-
-            {/* Price */}
-            <div className="flex items-center mb-6 gap-4">
-              {product.discountedPrice ? (
-                <>
-                  <span className="text-3xl font-bold text-indigo-600">
-                    ${product.discountedPrice.toFixed(2)}
-                  </span>
-                  <span className="line-through text-gray-400 text-lg">
-                    ${product.originalPrice.toFixed(2)}
-                  </span>
-                </>
-              ) : (
-                <span className="text-3xl font-bold text-gray-900">${product.price.toFixed(2)}</span>
-              )}
-            </div>
-
-            {/* Description */}
-            {product.description && (
-              <p className="text-gray-600 mb-6 leading-relaxed">{product.description}</p>
-            )}
+      
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-white rounded-2xl shadow-lg p-8 grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Image Section */}
+          <div className="w-full h-[450px] bg-gray-50 rounded-xl flex items-center justify-center p-4">
+            <img
+              src={product.images?.[0] || "https://via.placeholder.com/500x500?text=No+Image"}
+              alt={product.name}
+              className="max-w-full max-h-full object-contain"
+            />
           </div>
 
-          {/* Actions */}
-          <div className="flex gap-4 flex-col sm:flex-row">
-            <button
-              onClick={handleAddToCart}
-              className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition shadow-md"
-            >
-              Add to Cart
-            </button>
+          {/* Details Section */}
+          <div className="flex flex-col justify-between">
+            <div>
+              <p className="text-indigo-600 font-semibold mb-2">{product.brand || 'N/A'}</p>
+              <h1 className="text-4xl font-extrabold text-gray-900 mb-4">{product.name}</h1>
+              
+              {product.rating && (
+                <div className="flex items-center mb-5">
+                  <div className="flex items-center text-yellow-400">
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i} className="text-2xl">
+                        {i < Math.floor(product.rating || 0) ? "★" : "☆"}
+                      </span>
+                    ))}
+                  </div>
+                  <span className="ml-3 text-gray-600 font-medium">{product.rating}/5</span>
+                </div>
+              )}
+              
+              <p className="text-4xl font-bold text-gray-900 mb-6">
+                ₹{(product.price || 0).toFixed(2)}
+              </p>
+              
+              <p className="text-gray-600 mb-6 leading-relaxed">{product.description}</p>
 
-            <button
-              onClick={handleBuyNow}
-              className="flex-1 bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition shadow-md"
-            >
-              Buy Now
-            </button>
-
-            <button
-              onClick={handleAddToWishlist}
-              className={`flex-1 ${
-                wishlistAdded ? "bg-pink-500" : "bg-gray-800"
-              } text-white py-3 rounded-xl font-semibold hover:opacity-90 transition shadow-md`}
-            >
-              {wishlistAdded ? "Added ❤️" : "Wishlist"}
-            </button>
+              {/* Stock Information */}
+              <div className="mb-6">
+                {isOutOfStock ? (
+                  <p className="font-semibold text-red-500 text-lg"> Out of Stock</p>
+                ) : (
+                  <p className="font-semibold text-green-600">
+                    Only {product.count} left in stock!
+                  </p>
+                )}
+              </div>
+            </div>
+            
+            {/* Actions Section */}
+            <div className="mt-6">
+              <div className="flex items-center gap-4 mb-6">
+                <label className="font-semibold">Quantity:</label>
+                <div className="flex items-center border rounded-lg">
+                  <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-4 py-2 text-lg">-</button>
+                  <span className="px-4 py-2 font-bold">{quantity}</span>
+                  <button 
+                    onClick={() => setQuantity(prev => Math.min(prev + 1, product.count))}
+                    disabled={quantity >= product.count || isOutOfStock}
+                    className="px-4 py-2 text-lg disabled:text-gray-300 disabled:cursor-not-allowed"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button
+                  onClick={handleAddToCart}
+                  disabled={isOutOfStock}
+                  className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition shadow-md disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
+                  {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
+                </button>
+                
+                <button
+                  onClick={handleBuyNow}
+                  disabled={isOutOfStock}
+                  className="flex-1 bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition shadow-md disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
+                  {isOutOfStock ? 'Out of Stock' : 'Buy Now'}
+                </button>
+                
+                <button
+                  onClick={handleToggleWishlist}
+                  disabled={!product}
+                  className={`w-full sm:w-14 h-14 flex items-center justify-center rounded-xl transition ${isInWishlist ? "bg-red-500 text-white" : "bg-gray-200 text-gray-800 hover:bg-gray-300"} disabled:bg-gray-200 disabled:cursor-not-allowed`}
+                  title={isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
+                >
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Toast Animation */}
-      <style>
-        {`
-          @keyframes slide-in-out {
-            0% { transform: translateX(100%); opacity: 0; }
-            10% { transform: translateX(0); opacity: 1; }
-            90% { transform: translateX(0); opacity: 1; }
-            100% { transform: translateX(100%); opacity: 0; }
-          }
-          .animate-slide-in-out {
-            animation: slide-in-out 3s ease forwards;
-          }
-        `}
-      </style>
+      
+      <style>{`
+        @keyframes slide-in-out {
+          0% { transform: translateX(120%); opacity: 0; }
+          10% { transform: translateX(0); opacity: 1; }
+          90% { transform: translateX(0); opacity: 1; }
+          100% { transform: translateX(120%); opacity: 0; }
+        }
+        .animate-slide-in-out {
+          animation: slide-in-out 3s ease-in-out forwards;
+        }
+      `}</style>
     </div>
   );
 };

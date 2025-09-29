@@ -1,10 +1,10 @@
 import React from "react";
-
+import Footer from "../components/Footer/Footer";
 const About = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gray-800 text-white py-20 px-4 text-center">
+      <div className="bg-black text-white py-20 px-4 text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">About SHOP.CO</h1>
         <p className="text-lg md:text-xl max-w-2xl mx-auto">
           At SHOP.CO, we are passionate about delivering high-quality products
@@ -46,6 +46,7 @@ const About = () => {
           </a>
         </p>
       </div>
+      <Footer />
     </div>
   );
 };

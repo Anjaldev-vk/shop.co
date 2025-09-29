@@ -1,258 +1,134 @@
-import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Link, useNavigate, NavLink } from "react-router-dom";
+import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
-import { AuthContext } from "../../context/AuthContext";
 
+// --- Icon Components ---
+const DashboardIcon = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>;
+const OrdersIcon = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>;
+const LogoutIcon = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>;
+
+// --- Helper component for the stats bar ---
+const StatCard = ({ label, value, icon }) => (
+    <div className="bg-white p-6 rounded-xl border border-gray-200 flex items-center gap-4">
+        <div className="bg-indigo-100 text-indigo-600 p-3 rounded-full">
+            {icon}
+        </div>
+        <div>
+            <p className="text-2xl font-bold text-gray-800">{value}</p>
+            <p className="text-sm text-gray-500">{label}</p>
+        </div>
+    </div>
+);
+
+
+// --- Main Profile Component ---
 const Profile = () => {
   const navigate = useNavigate();
   const { currentUser, logout } = useContext(AuthContext);
-  const { cart } = useCart();
+  const { cartItemCount } = useCart();
   const { wishlist } = useWishlist();
+  const [orderedItemsCount, setOrderedItemsCount] = useState(0);
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
 
-  // Inline SVG components for icons
-  const UserIcon = ({ className }) => (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-      />
-    </svg>
-  );
-
-  const EnvelopeIcon = ({ className }) => (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-      />
-    </svg>
-  );
-
-  const CheckIcon = ({ className }) => (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-    </svg>
-  );
-
-  const ShoppingCartIcon = ({ className }) => (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-      />
-    </svg>
-  );
-
-  const HeartIcon = ({ className }) => (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-      />
-    </svg>
-  );
-
-  const ClipboardDocumentListIcon = ({ className }) => (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-      />
-    </svg>
-  );
-
-  const ArrowRightOnRectangleIcon = ({ className }) => (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7" />
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 21v-2a4 4 0 00-4-4H2a4 4 0 00-4 4v2" />
-    </svg>
-  );
-
-  // Fetch only current user's orders
-  const orders = currentUser
-    ? JSON.parse(localStorage.getItem(`orders_${currentUser.username}`)) || []
-    : [];
+  useEffect(() => {
+    if (!currentUser) return;
+    const fetchOrderStats = async () => {
+      setIsLoadingStats(true);
+      try {
+        const response = await axios.get(`http://localhost:3001/orders?userId=${currentUser.id}`);
+        const totalItems = response.data.reduce((total, order) => 
+            total + order.items.reduce((itemTotal, item) => itemTotal + item.quantity, 0), 0);
+        setOrderedItemsCount(totalItems);
+      } catch (error) {
+        console.error("Failed to fetch order stats:", error);
+      } finally {
+        setIsLoadingStats(false);
+      }
+    };
+    fetchOrderStats();
+  }, [currentUser]);
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    navigate("/login", { replace: true });
   };
 
   if (!currentUser) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
-        <div className="text-center p-6 bg-white rounded-2xl shadow-lg">
-          <p className="text-gray-700 text-lg mb-3">You are not logged in.</p>
-          <div className="flex justify-center gap-3">
-            <Link
-              to="/login"
-              className="inline-flex items-center px-5 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition duration-300"
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <div className="text-center p-10 bg-white rounded-2xl shadow-lg">
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Welcome!</h2>
+            <p className="text-gray-600 mb-6">Log in to manage your account and view your orders.</p>
+            <button
+                onClick={() => navigate("/login")}
+                className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
             >
-              Login
-            </Link>
-            <Link
-              to="/signup"
-              className="inline-flex items-center px-5 py-2 bg-gray-600 text-white rounded-full hover:bg-gray-700 transition duration-300"
-            >
-              Signup
-            </Link>
-          </div>
+                Go to Login
+            </button>
         </div>
       </div>
     );
   }
 
+  const navLinkClasses = "flex items-center gap-3 px-4 py-3 rounded-lg font-semibold transition-colors";
+  const activeLinkClasses = "bg-indigo-100 text-indigo-700";
+  const inactiveLinkClasses = "text-gray-600 hover:bg-gray-100";
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-gray-100 flex items-center justify-center py-8">
-      <div className="max-w-4xl w-full bg-white rounded-2xl shadow-xl p-6">
-        {/* Profile Header */}
-        <div className="flex items-center justify-center mb-4">
-          <div className="relative">
-            <div className="w-20 h-20 bg-indigo-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-              {currentUser.username.charAt(0).toUpperCase()}
-            </div>
-            <div className="absolute bottom-0 right-0 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
-          </div>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row gap-8">
 
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">
-          {currentUser.username}'s Profile
-        </h2>
-
-        {/* Profile Info */}
-        <div className="space-y-2 mb-6">
-          <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
-            <UserIcon className="w-5 h-5 text-indigo-600" />
-            <div>
-              <p className="text-sm text-gray-500">Username</p>
-              <p className="text-base font-semibold text-gray-800">{currentUser.username}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
-            <EnvelopeIcon className="w-5 h-5 text-indigo-600" />
-            <div>
-              <p className="text-sm text-gray-500">Email</p>
-              <p className="text-base font-semibold text-gray-800">{currentUser.email}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
-            <CheckIcon className="w-5 h-5 text-indigo-600" />
-            <div>
-              <p className="text-sm text-gray-500">Role</p>
-              <p className="text-base font-semibold text-gray-800">{currentUser.role}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Stats Section */}
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          <div className="flex items-center gap-2 p-3 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">
-            <ShoppingCartIcon className="w-5 h-5 text-indigo-600" />
-            <div>
-              <p className="text-sm text-gray-500">Cart Items</p>
-              <p className="text-base font-semibold text-gray-800">
-                {cart.reduce((acc, item) => acc + item.quantity, 0)}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 p-3 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">
-            <HeartIcon className="w-5 h-5 text-indigo-600" />
-            <div>
-              <p className="text-sm text-gray-500">Wishlist Items</p>
-              <p className="text-base font-semibold text-gray-800">{wishlist.length}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Orders Section */}
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
-            <ClipboardDocumentListIcon className="w-5 h-5 text-indigo-600" />
-            Previous Orders
-          </h3>
-
-          {orders.length === 0 ? (
-            <p className="text-gray-500 text-center text-sm">No previous orders</p>
-          ) : (
-            <div className="space-y-4">
-              {orders.map((order, index) => (
-                <div
-                  key={index}
-                  className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
-                >
-                  {/* Order Header */}
-                  <div className="flex justify-between items-center mb-3">
-                    <p className="text-sm text-gray-500">Order #{order.id}</p>
-                    <p className="text-sm text-gray-500">
-                      {new Date(order.date).toLocaleString()}
-                    </p>
-                  </div>
-
-                  {/* Order Items */}
-                  <ul className="space-y-2">
-                    {order.items.map((item, i) => (
-                      <li key={i} className="flex items-center gap-3">
-                        {/* Small Product Image */}
-                        {item.image ? (
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="w-12 h-12 rounded-lg object-cover border"
-                          />
-                        ) : (
-                          <div className="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center text-gray-400 text-xs">
-                            No Img
-                          </div>
-                        )}
-
-                        {/* Product Details */}
-                        <div className="flex-1">
-                          <p className="font-medium text-gray-800">{item.name}</p>
-                          <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
+                {/* --- Sidebar --- */}
+                <aside className="md:w-1/4">
+                    <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col h-full">
+                        <div className="text-center mb-8">
+                            <div className="w-24 h-24 mx-auto bg-gradient-to-br from-indigo-200 to-purple-200 rounded-full flex items-center justify-center text-4xl font-bold text-indigo-700 mb-2">
+                                {currentUser.username.charAt(0).toUpperCase()}
+                            </div>
+                            <h2 className="text-xl font-bold text-gray-800">{currentUser.username}</h2>
+                            <p className="text-sm text-gray-500">{currentUser.email}</p>
                         </div>
 
-                        {/* Price */}
-                        <p className="font-semibold text-indigo-600">
-                          $
-                          {(
-                            (item.discountedPrice ?? item.price ?? 0) *
-                            (item.quantity || 1)
-                          ).toFixed(2)}
+                        <nav className="flex flex-col space-y-2">
+                            <NavLink to="/profile" className={({isActive}) => `${navLinkClasses} ${isActive ? activeLinkClasses : inactiveLinkClasses}`} end>
+                                <DashboardIcon className="w-5 h-5"/> Account Overview
+                            </NavLink>
+                            <NavLink to="/my-orders" className={({isActive}) => `${navLinkClasses} ${isActive ? activeLinkClasses : inactiveLinkClasses}`}>
+                                <OrdersIcon className="w-5 h-5"/> My Orders
+                            </NavLink>
+                        </nav>
+                        
+                        <button
+                            onClick={handleLogout}
+                            className={`${navLinkClasses} ${inactiveLinkClasses} mt-auto`}
+                        >
+                            <LogoutIcon className="w-5 h-5"/> Logout
+                        </button>
+                    </div>
+                </aside>
+
+                {/* --- Main Content --- */}
+                <main className="flex-1">
+                    <div className="bg-white p-8 rounded-xl shadow-md border border-gray-200">
+                        <h1 className="text-3xl font-bold text-gray-900 mb-6">Account Overview</h1>
+                        <p className="text-gray-600 mb-8">
+                            Welcome back, {currentUser.username}! Here's a summary of your account activity.
                         </p>
-                      </li>
-                    ))}
-                  </ul>
+                        
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <StatCard label="In Your Cart" value={cartItemCount} icon={<DashboardIcon className="w-6 h-6"/>} />
+                            <StatCard label="In Wishlist" value={wishlist.length} icon={<DashboardIcon className="w-6 h-6"/>} />
+                            <StatCard label="Items Ordered" value={isLoadingStats ? "..." : orderedItemsCount} icon={<OrdersIcon className="w-6 h-6"/>} />
+                        </div>
+                    </div>
+                </main>
 
-                  {/* Order Total */}
-                  <div className="mt-3 text-right font-bold text-gray-800">
-                    Total: ${order.total.toFixed(2)}
-                  </div>
-                </div>
-              ))}
             </div>
-          )}
         </div>
-
-        {/* Logout Button */}
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 px-5 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition duration-300"
-        >
-          <ArrowRightOnRectangleIcon className="w-5 h-5" />
-          Logout
-        </button>
-      </div>
     </div>
   );
 };

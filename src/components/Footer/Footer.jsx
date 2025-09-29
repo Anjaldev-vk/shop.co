@@ -123,24 +123,24 @@ const Footer = () => {
           <p>Shop.co © 2000-2025. All Rights Reserved</p>
           <div className="flex space-x-3 xs:space-x-4 mt-3 sm:mt-0">
             <img
-              src="https://via.placeholder.com/40x20?text=Visa"
+              src="https://tse2.mm.bing.net/th/id/OIP._VhDEZTT9T5bcaNTLp75pwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"
               alt="Visa"
-              className="h-4 xs:h-5"
+              className="h-6 xs:h-7"
             />
             <img
-              src="https://via.placeholder.com/40x20?text=Mastercard"
+              src="https://clipground.com/images/visa-mastercard-icon-png-2.jpg"
               alt="Mastercard"
-              className="h-4 xs:h-5"
+              className="h-5 xs:h-6"
             />
             <img
-              src="https://via.placeholder.com/40x20?text=PayPal"
+              src="https://tse4.mm.bing.net/th/id/OIP.Wyu_7O9M0lmASmXeTPBxLQHaJF?rs=1&pid=ImgDetMain&o=7&rm=3"
               alt="PayPal"
               className="h-4 xs:h-5"
             />
             <img
-              src="https://via.placeholder.com/40x20?text=Google+Pay"
+              src="https://logospng.org/wp-content/uploads/google-pay.png"
               alt="Google Pay"
-              className="h-4 xs:h-5"
+              className="h-5 xs:h-6"
             />
           </div>
         </div>
