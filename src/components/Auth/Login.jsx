@@ -47,13 +47,13 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-indigo-100 py-12 px-4">
       <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-10">
-        <h2 className="text-4xl font-bold text-center text-indigo-700 mb-8">
+        <h2 className="text-4xl font-bold text-center text-black mb-8">
           Welcome Back
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="relative">
-            <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-indigo-400" />
+            <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-black" />
             <input
               type="text"
               placeholder="Username"
@@ -65,7 +65,7 @@ const Login = () => {
           </div>
 
           <div className="relative">
-            <LockIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-indigo-400" />
+            <LockIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-black" />
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
@@ -90,7 +90,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 disabled:bg-indigo-400 transition-all duration-300 shadow-md"
+            className="w-full py-3 bg-black  text-white font-semibold rounded-xl hover:bg-gray-800 disabled:bg-indigo-400 transition-all duration-300 shadow-md"
           >
             {isLoading ? "Logging in..." : "Login"}
           </button>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
 // --- Form Component for Adding/Editing Products (No changes needed here) ---
@@ -84,6 +84,9 @@ const ManageProducts = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterCategory, setFilterCategory] = useState(''); // Empty string means 'All'
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -98,6 +101,24 @@ const ManageProducts = () => {
     };
     fetchProducts();
   }, []);
+
+  const categories = useMemo(() => {
+    if (!products) return [];
+    // Get unique categories and filter out any falsy values (like null or undefined)
+    return [...new Set(products.map(p => p.category).filter(Boolean))];
+  }, [products]);
+  
+  const filteredProducts = useMemo(() => {
+    return products
+      .filter(product => {
+        // Category filter logic
+        return filterCategory ? product.category === filterCategory : true;
+      })
+      .filter(product => {
+        // Search term logic (case-insensitive)
+        return product.name.toLowerCase().includes(searchTerm.toLowerCase());
+      });
+  }, [products, searchTerm, filterCategory]);
 
   const handleAddProduct = () => {
     setEditingProduct(null);
@@ -114,14 +135,11 @@ const ManageProducts = () => {
     setEditingProduct(null);
   };
 
-  // --- <<< CORRECTED AND IMPROVED handleSave FUNCTION >>> ---
   const handleSave = async (formData) => {
     if (editingProduct) {
-      // --- UPDATE LOGIC ---
-      // Merge existing data with form data to prevent fields from being erased
       const updatedProduct = {
-        ...editingProduct, // Start with all original data
-        ...formData,      // Overwrite with the edited fields from the form
+        ...editingProduct,
+        ...formData,
         price: parseFloat(formData.price),
         count: parseInt(formData.count, 10),
       };
@@ -135,13 +153,11 @@ const ManageProducts = () => {
         alert("Failed to update product.");
       }
     } else {
-      // --- CREATE LOGIC ---
       const newProduct = {
         ...formData,
         price: parseFloat(formData.price),
         count: parseInt(formData.count, 10),
-        // Add default values for fields not in the form
-        rating: 4.5, // Example default
+        rating: 4.5,
         isNewArrival: true,
         isTopSelling: false,
         created_at: new Date().toISOString(),
@@ -160,7 +176,6 @@ const ManageProducts = () => {
     }
     handleCloseModal();
   };
-
 
   const handleDelete = async (productId) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
@@ -188,10 +203,40 @@ const ManageProducts = () => {
       )}
 
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Manage Products 📦</h1>
-        <button onClick={handleAddProduct} className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 shadow font-semibold">
+        <h1 className="text-2xl font-bold">Manage Products </h1>
+        <button onClick={handleAddProduct} className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 shadow font-semibold">
           + Add New Product
         </button>
+      </div>
+      
+      <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search by product name..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="border rounded-lg py-2 pl-10 pr-4 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+
+        <div className="flex items-center gap-2">
+            <label htmlFor="category-filter" className="font-medium text-gray-700">Category:</label>
+            <select
+                id="category-filter"
+                value={filterCategory}
+                onChange={(e) => setFilterCategory(e.target.value)}
+                className="border rounded-lg py-2 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+                <option value="">All Categories</option>
+                {categories.map(category => (
+                    <option key={category} value={category}>{category}</option>
+                ))}
+            </select>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
@@ -206,20 +251,28 @@ const ManageProducts = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map(product => (
-              <tr key={product.id} className="border-b hover:bg-gray-50">
-                <td className="p-3">
-                  <img src={product.images?.[0] || 'https://via.placeholder.com/150'} alt={product.name} className="w-16 h-16 object-cover rounded-md" />
-                </td>
-                <td className="p-3 font-medium">{product.name}</td>
-                <td className="p-3">₹{product.price?.toFixed(2)}</td>
-                <td className="p-3">{product.count}</td>
-                <td className="p-3 text-center">
-                  <button onClick={() => handleEditProduct(product)} className="text-blue-600 hover:underline font-medium mr-4">Edit</button>
-                  <button onClick={() => handleDelete(product.id)} className="text-red-600 hover:underline font-medium">Delete</button>
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map(product => (
+                <tr key={product.id} className="border-b hover:bg-gray-50">
+                  <td className="p-3">
+                    <img src={product.images?.[0] || 'https://via.placeholder.com/150'} alt={product.name} className="w-16 h-16 object-cover rounded-md" />
+                  </td>
+                  <td className="p-3 font-medium">{product.name}</td>
+                  <td className="p-3">₹{product.price?.toFixed(2)}</td>
+                  <td className="p-3">{product.count}</td>
+                  <td className="p-3 text-center">
+                    <button onClick={() => handleEditProduct(product)} className="text-blue-600 hover:underline font-medium mr-4">Edit</button>
+                    <button onClick={() => handleDelete(product.id)} className="text-red-600 hover:underline font-medium">Delete</button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="text-center p-10 text-gray-500">
+                  No products found. Try adjusting your search or filters.
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect, useCallback, useMemo } from "react";
-import toast from 'react-hot-toast'; // ✅ Import toast for notifications
+import toast from 'react-hot-toast';
 import { AuthContext } from "./AuthContext";
 
 const CartContext = createContext();
@@ -39,12 +39,12 @@ export const CartProvider = ({ children }) => {
       const mergedCart = productDetails.map(product => ({
         ...product,
         quantity: userCartData.find(item => item.productId === String(product.id))?.quantity || 0,
-      })).filter(item => item.quantity > 0); // Ensure no items with 0 quantity are added
+      })).filter(item => item.quantity > 0);
 
       setCart(mergedCart);
     } catch (error) {
       console.error("Failed to fetch cart:", error);
-      toast.error("Could not load your cart."); // ✅ Notify user on fetch failure
+      toast.error("Could not load your cart.");
       setCart([]);
     } finally {
       setLoading(false);
@@ -71,32 +71,55 @@ export const CartProvider = ({ children }) => {
     }
   };
   
-  const formatCartForServer = (cartState) => cartState.map(({ id, quantity }) => ({ productId: String(id), quantity }));
+  const formatCartForServer = (cartState) =>
+    cartState.map(({ id, quantity }) => ({ productId: String(id), quantity }));
 
+  // Use functional state update to avoid duplicates on rapid clicks and enforce stock using `count`
   const addToCart = async (product, quantityToAdd = 1) => {
     if (!currentUser) {
       toast.error("Please log in to add items to your cart.");
       return;
     }
-    const originalCart = [...cart];
-    const existingItem = cart.find((item) => item.id === product.id);
-    let newCart;
 
-    if (existingItem) {
-      newCart = cart.map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity + quantityToAdd } : item
-      );
-    } else {
-      newCart = [...cart, { ...product, quantity: quantityToAdd }];
-    }
-    
-    setCart(newCart);
-    toast.success(`${quantityToAdd} x ${product.name} added to cart!`); // ✅ Notify user
+    let originalCartSnapshot = cart;
+    let updatedCart;
 
-    const serverResult = await updateServerCart(formatCartForServer(newCart));
+    setCart((prev) => {
+      originalCartSnapshot = prev;
+      const maxStock = Number.isFinite(product?.count) ? product.count : Infinity;
+      const idx = prev.findIndex((item) => item.id === product.id);
+
+      if (idx !== -1) {
+        const target = prev[idx];
+        const newQuantity = target.quantity + quantityToAdd;
+        if (newQuantity > maxStock) {
+          toast.error(`Only ${maxStock} items available in stock.`);
+          updatedCart = prev; // no change
+          return prev;
+        }
+        updatedCart = prev.map((item, i) => (i === idx ? { ...item, quantity: newQuantity } : item));
+        return updatedCart;
+      }
+
+      if (quantityToAdd > maxStock) {
+        toast.error(`Only ${maxStock} items available in stock.`);
+        updatedCart = prev; // no change
+        return prev;
+      }
+
+      updatedCart = [...prev, { ...product, quantity: quantityToAdd }];
+      return updatedCart;
+    });
+
+    // If no change was applied (due to stock limit), don't proceed
+    if (updatedCart === originalCartSnapshot) return;
+
+    toast.success(`${quantityToAdd} x ${product.name} added to cart!`);
+
+    const serverResult = await updateServerCart(formatCartForServer(updatedCart));
     if (!serverResult) {
-      setCart(originalCart);
-      toast.error("Failed to update cart. Please try again."); // ✅ Notify user on failure
+      setCart(originalCartSnapshot);
+      toast.error("Failed to update cart. Please try again.");
     }
   };
 
@@ -113,12 +136,11 @@ export const CartProvider = ({ children }) => {
           );
 
     setCart(newCart);
-    // No toast here as UI changes are immediate and clear
 
     const serverResult = await updateServerCart(formatCartForServer(newCart));
     if (!serverResult) {
       setCart(originalCart);
-      toast.error("Failed to update item quantity."); // ✅ Notify user on failure
+      toast.error("Failed to update item quantity.");
     }
   };
 
@@ -128,31 +150,49 @@ export const CartProvider = ({ children }) => {
     const newCart = cart.filter((item) => item.id !== productId);
     
     setCart(newCart);
-    toast.error(`${productName} removed from cart.`); // ✅ Notify user
+    toast.error(`${productName} removed from cart.`);
 
     const serverResult = await updateServerCart(formatCartForServer(newCart));
     if (!serverResult) {
       setCart(originalCart);
-      toast.error("Failed to remove item. Please try again."); // ✅ Notify user on failure
+      toast.error("Failed to remove item. Please try again.");
     }
   };
 
   const clearCart = async () => {
     const originalCart = [...cart];
     setCart([]);
-    toast.success("Cart has been cleared."); // ✅ Notify user
+    toast.success("Cart has been cleared.");
     
     const serverResult = await updateServerCart([]);
     if (!serverResult) {
       setCart(originalCart);
-      toast.error("Could not clear cart. Please try again."); // ✅ Notify user on failure
+      toast.error("Could not clear cart. Please try again.");
     }
   };
 
-  const cartItemCount = useMemo(() => cart.reduce((count, item) => count + item.quantity, 0), [cart]);
-  const cartTotal = useMemo(() => cart.reduce((total, item) => total + (item.discountedPrice || item.price || 0) * item.quantity, 0), [cart]);
+  const cartItemCount = useMemo(
+    () => cart.reduce((count, item) => count + item.quantity, 0),
+    [cart]
+  );
+  const cartTotal = useMemo(
+    () => cart.reduce(
+      (total, item) => total + (item.discountedPrice || item.price || 0) * item.quantity,
+      0
+    ),
+    [cart]
+  );
 
-  const value = { cart, addToCart, decrementCartItem, removeFromCart, clearCart, loading, cartItemCount, cartTotal };
+  const value = {
+    cart,
+    addToCart,
+    decrementCartItem,
+    removeFromCart,
+    clearCart,
+    loading,
+    cartItemCount,
+    cartTotal
+  };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };

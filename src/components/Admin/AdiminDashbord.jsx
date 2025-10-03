@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-// 1. Import Chart.js components
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
 import { Bar, Pie } from 'react-chartjs-2';
 
@@ -147,7 +146,7 @@ const AdminDashboard = () => {
 
     return (
         <div className="p-4 md:p-6 lg:p-8 bg-gray-50 min-h-screen">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">Admin Dashboard 📊</h1>
+            <h1 className="text-3xl font-bold text-gray-800 mb-6">Admin Dashboard </h1>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <StatCard title="Total Users" value={stats.users} icon={<UsersIcon />} />

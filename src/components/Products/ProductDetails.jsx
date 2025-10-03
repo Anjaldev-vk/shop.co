@@ -14,8 +14,7 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [toastMessage, setToastMessage] = useState("");
-
+  
   const isInWishlist = product
     ? wishlist.some((item) => item.id === product.id)
     : false;
@@ -47,17 +46,10 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
-  const showToast = (message) => {
-    setToastMessage(message);
-    setTimeout(() => {
-      setToastMessage("");
-    }, 3000);
-  };
-
+  
   const handleAddToCart = () => {
     if (!product || isOutOfStock) return;
     addToCart(product, quantity);
-    showToast(`${quantity} x ${product.name} added to cart!`);
   };
 
   const handleBuyNow = () => {
@@ -70,10 +62,8 @@ const ProductDetails = () => {
     if (!product) return;
     if (isInWishlist) {
       removeFromWishlist(product.id);
-      showToast(`${product.name} removed from wishlist!`);
     } else {
       addToWishlist(product);
-      showToast(`${product.name} added to wishlist!`);
     }
   };
 
@@ -91,12 +81,7 @@ const ProductDetails = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      {toastMessage && (
-        <div className="fixed top-24 right-5 bg-white text-gray-900 px-6 py-3 rounded-xl shadow-lg z-50 border animate-slide-in-out">
-          ✅ {toastMessage}
-        </div>
-      )}
-      
+            
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-2xl shadow-lg p-8 grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Image Section */}
@@ -195,18 +180,7 @@ const ProductDetails = () => {
         </div>
       </div>
       
-      <style>{`
-        @keyframes slide-in-out {
-          0% { transform: translateX(120%); opacity: 0; }
-          10% { transform: translateX(0); opacity: 1; }
-          90% { transform: translateX(0); opacity: 1; }
-          100% { transform: translateX(120%); opacity: 0; }
-        }
-        .animate-slide-in-out {
-          animation: slide-in-out 3s ease-in-out forwards;
-        }
-      `}</style>
-    </div>
+          </div>
   );
 };
 

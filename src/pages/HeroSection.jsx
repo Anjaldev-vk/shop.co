@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import BrandSection from "./brandSection.jsx";
 import { useNavigate } from "react-router-dom";
+import vedio from '../assets/hero.mp4'
 
 // No changes needed for the Counter component
 const Counter = ({ target, duration = 2000 }) => {
@@ -33,14 +34,19 @@ const HeroSection = () => {
 
   return (
     <>
-      {/* Main container with background image */}
+      {/* Main container with background video */}
       <div
-        className="relative bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center min-h-[70vh] sm:min-h-[80vh] text-center px-4 py-16 overflow-hidden"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop')", // <-- REPLACE WITH YOUR IMAGE URL
-        }}
+        className="relative flex flex-col items-center justify-center min-h-[70vh] sm:min-h-[80vh] text-center px-4 py-16 overflow-hidden bg-black"
       >
+        {/* Background video */}
+        <video
+          className="absolute inset-0 w-full h-full object-cover z-0"
+          src={vedio}
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
         {/* Dark overlay for text readability */}
         <div className="absolute inset-0 bg-black/60 z-0"></div>
 

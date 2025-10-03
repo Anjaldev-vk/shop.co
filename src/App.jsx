@@ -27,6 +27,7 @@ import AdminDashboard from './components/Admin/AdiminDashbord';
 import ManageProducts from './components/Admin/ManageProducts';
 import ManageUsers from './components/Admin/ManageUsers';
 import ViewOrders from './components/Admin/ViewOrders';
+import { Toaster } from 'react-hot-toast';
 
 // Layout for user-facing pages
 const AppLayout = () => (
@@ -41,10 +42,9 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <WishlistProvider>
+          <Toaster position="top-right" gutter={8} toastOptions={{ duration: 3000 }} />
           <Routes>
-            {/* ======================================== */}
-            {/* User Routes (with Navbar)                */}
-            {/* ======================================== */}
+            
             <Route element={<AppLayout />}>
               {/* Public routes */}
               <Route path="/" element={<HomePage />} />
@@ -63,9 +63,7 @@ function App() {
               <Route path="/contact" element={<ContactPage />} />
             </Route>
 
-            {/* ======================================== */}
-            {/* Admin Routes (with AdminLayout)          */}
-            {/* ======================================== */}
+            
             <Route
               path="/admin"
               element={
