@@ -1,0 +1,769 @@
+{
+  "users": [
+    {
+      "id": "2",
+      "username": "admin",
+      "email": "admin@example.com",
+      "password": "admin",
+      "role": "admin",
+      "isBlock": false,
+      "profilePhoto": "https://example.com/profile_photos/admin.jpg",
+      "cart": [],
+      "orders": [],
+      "wishlist": [],
+      "created_at": "2025-09-24T11:00:00Z"
+    },
+    {
+      "id": "3",
+      "username": "Anjal",
+      "email": "gamexanjalx@gmail.com",
+      "password": "654321",
+      "role": "user",
+      "isBlock": false,
+      "profilePhoto": null,
+      "cart": [
+        {
+          "productId": "3",
+          "quantity": 6
+        },
+        {
+          "productId": "9",
+          "quantity": 1
+        }
+      ],
+      "orders": [],
+      "wishlist": [
+        "4"
+      ],
+      "created_at": "2025-09-24T11:00:00Z"
+    },
+    {
+      "id": "4",
+      "username": "anjal dev",
+      "email": "mkmanjal@gmail.com",
+      "password": "123456",
+      "role": "user",
+      "isBlock": false,
+      "profilePhoto": null,
+      "cart": [],
+      "orders": [],
+      "wishlist": [],
+      "created_at": "2025-09-24T11:00:00Z"
+    },
+    {
+      "id": "6747",
+      "username": "Midun",
+      "email": "midun@gmail.com",
+      "password": "midun123",
+      "role": "user",
+      "isBlock": false,
+      "profilePhoto": null,
+      "cart": [],
+      "orders": [],
+      "wishlist": [
+        "3",
+        "2"
+      ],
+      "created_at": "2025-09-25T08:35:04.102Z"
+    },
+    {
+      "id": "3f96",
+      "username": "gokul",
+      "email": "gokul@gmail.com",
+      "password": "vghbfty",
+      "role": "user",
+      "isBlock": false,
+      "profilePhoto": null,
+      "cart": [
+        {
+          "productId": "2",
+          "quantity": 1
+        },
+        {
+          "productId": "7",
+          "quantity": 1
+        }
+      ],
+      "orders": [],
+      "wishlist": [
+        "3",
+        "4",
+        "2"
+      ],
+      "created_at": "2025-09-26T10:40:04.071Z"
+    },
+    {
+      "id": "429f",
+      "username": "yadu",
+      "email": "yadhukrishnangta@gmail.com",
+      "password": "123456",
+      "role": "user",
+      "isBlock": false,
+      "profilePhoto": null,
+      "cart": [
+        {
+          "productId": "3",
+          "quantity": 1
+        }
+      ],
+      "orders": [],
+      "wishlist": [
+        "2",
+        "3"
+      ],
+      "created_at": "2025-09-29T09:29:13.495Z"
+    }
+  ],
+  "products": [
+    {
+      "id": "3",
+      "name": "Checkered Shirt",
+      "description": "Classic checkered shirt, perfect for casual and semi-formal outings.",
+      "price": 1800,
+      "count": 26,
+      "category": "Shirt",
+      "images": [
+        "https://image.hm.com/assets/hm/84/de/84de62aceda9354cd420b837c82f44a85cf6b36d.jpg?imwidth=1260",
+        "https://image.hm.com/assets/hm/a2/e1/a2e17e5847c3535628cabb27f41d78ceef944966.jpg?imwidth=1260"
+      ],
+      "isActive": true,
+      "created_at": "2025-09-24T11:00:00Z",
+      "rating": 4.5,
+      "isNewArrival": true,
+      "isTopSelling": false,
+      "brand": "StyleHub",
+      "colors": [
+        "Red-Black",
+        "Blue-White"
+      ],
+      "sizes": [
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "4",
+      "name": "Sleeve Striped T-shirt",
+      "description": "Trendy striped t-shirt with soft cotton fabric and slim fit.",
+      "price": 1300,
+      "count": 20,
+      "category": "T-Shirt",
+      "images": [
+        "https://image.hm.com/assets/hm/a2/e1/a2e17e5847c3535628cabb27f41d78ceef944966.jpg?imwidth=1260",
+        "https://image.hm.com/assets/hm/50/d7/50d7b1f665474cdc57c76d418b16b1ed7d489946.jpg?imwidth=1260"
+      ],
+      "isActive": true,
+      "created_at": "2025-09-24T11:00:00Z",
+      "rating": 4.5,
+      "isNewArrival": true,
+      "isTopSelling": false,
+      "brand": "UrbanWear",
+      "colors": [
+        "White-Black",
+        "Gray-Blue"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ]
+    },
+    {
+      "id": "5",
+      "name": "Vertical Striped Shirt",
+      "description": "Vertical striped shirt with a slim fit design for a modern look.",
+      "price": 2120,
+      "count": 18,
+      "category": "Shirt",
+      "images": [
+        "https://image.hm.com/assets/hm/75/0c/750c5e9c34da1a59bfecd04da803fe7bab6c5e60.jpg?imwidth=1260",
+        "https://image.hm.com/assets/hm/78/c8/78c85025776ef8b33560737a2889264c1e19f94a.jpg?imwidth=1260"
+      ],
+      "isActive": true,
+      "created_at": "2025-09-24T11:00:00Z",
+      "rating": 5,
+      "isNewArrival": false,
+      "isTopSelling": true,
+      "brand": "EliteStyle",
+      "colors": [
+        "White-Blue",
+        "Gray-Black"
+      ],
+      "sizes": [
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "6",
+      "name": "Courage Graphic T-shirt",
+      "description": "Cotton t-shirt with bold graphic print for a casual statement.",
+      "price": 1450,
+      "count": 27,
+      "category": "T-Shirt",
+      "images": [
+        "https://image.hm.com/assets/hm/48/6c/486cc2060e359564510bc0d33702e374d325c67a.jpg?imwidth=1260",
+        "https://image.hm.com/assets/hm/05/66/05664a801dd930fcfcee8bc419221598e426794b.jpg?imwidth=1260"
+      ],
+      "isActive": true,
+      "created_at": "2025-09-24T11:00:00Z",
+      "rating": 4,
+      "isNewArrival": false,
+      "isTopSelling": true,
+      "brand": "StreetMode",
+      "colors": [
+        "Black",
+        "White"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "7",
+      "name": "Loose Fit Bermuda Shorts",
+      "description": "Casual bermuda shorts with breathable cotton fabric.",
+      "price": 900,
+      "count": 33,
+      "category": "Shorts",
+      "images": [
+        "https://image.hm.com/assets/hm/2a/56/2a56fd53f7ac7d1618087e8b352a6b8a77029ef0.jpg?imwidth=1260",
+        "https://image.hm.com/assets/hm/f3/ae/f3aeb0b8a4f10134f0f62d1b5a5b565a0c326c2e.jpg?imwidth=1260"
+      ],
+      "isActive": true,
+      "created_at": "2025-09-24T11:00:00Z",
+      "rating": 4,
+      "isNewArrival": false,
+      "isTopSelling": true,
+      "brand": "CoolWear",
+      "colors": [
+        "Khaki",
+        "Navy",
+        "Black"
+      ],
+      "sizes": [
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "8",
+      "name": "Faded Skinny Jeans",
+      "description": "Stylish faded skinny jeans with a stretchable fabric for all-day comfort.",
+      "price": 2100,
+      "count": 22,
+      "category": "Jeans",
+      "images": [
+        "https://image.hm.com/assets/hm/50/d7/50d7b1f665474cdc57c76d418b16b1ed7d489946.jpg?imwidth=1260",
+        "https://image.hm.com/assets/hm/a1/eb/a1eb4df1bac12aa1f7c1684bb78c191fd90ed286.jpg?imwidth=1260"
+      ],
+      "isActive": true,
+      "created_at": "2025-09-24T11:00:00Z",
+      "rating": 4.5,
+      "isNewArrival": false,
+      "isTopSelling": true,
+      "brand": "DenimCo",
+      "colors": [
+        "Blue",
+        "Dark Gray"
+      ],
+      "sizes": [
+        "28",
+        "30",
+        "32",
+        "34",
+        "36"
+      ]
+    },
+    {
+      "id": "9",
+      "name": "Classic Polo Shirt",
+      "description": "Timeless polo shirt with soft cotton fabric, perfect for casual wear.",
+      "price": 1500,
+      "count": 27,
+      "category": "T-Shirt",
+      "images": [
+        "https://static.zara.net/assets/public/4596/7a87/d53345b2a64c/15a6bf6fe7bf/06674322704-e1/06674322704-e1.jpg?ts=1756121712654&w=750",
+        "https://static.zara.net/assets/public/4596/7a87/d53345b2a64c/15a6bf6fe7bf/06674322704-e1/06674322704-e1.jpg?ts=1756121712654&w=750"
+      ],
+      "isActive": true,
+      "created_at": "2025-09-24T11:00:00Z",
+      "rating": 4.3,
+      "isNewArrival": true,
+      "isTopSelling": false,
+      "brand": "EliteStyle",
+      "colors": [
+        "Navy",
+        "White",
+        "Green"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "10",
+      "name": "Denim Jacket",
+      "description": "Classic blue denim jacket with button closure and chest pockets.",
+      "price": 3500,
+      "count": 15,
+      "category": "Jacket",
+      "images": [
+        "https://static.zara.net/assets/public/f2c7/db2a/934d4cc1b53c/16845caedff2/06987302730-e1/06987302730-e1.jpg?ts=1756715349941&w=750",
+        "https://static.zara.net/assets/public/f2c7/db2a/934d4cc1b53c/16845caedff2/06987302730-e1/06987302730-e1.jpg?ts=1756715349941&w=750"
+      ],
+      "isActive": true,
+      "created_at": "2025-09-24T11:00:00Z",
+      "rating": 4.7,
+      "isNewArrival": true,
+      "isTopSelling": true,
+      "brand": "DenimCo",
+      "colors": [
+        "Blue"
+      ],
+      "sizes": [
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "11",
+      "name": "Slim Fit Chinos",
+      "description": "Versatile slim-fit chinos suitable for casual and semi-formal outfits.",
+      "price": 2000,
+      "count": 32,
+      "category": "Pants",
+      "images": [
+        "https://image.hm.com/assets/hm/c2/c5/c2c516da48299eb461b9a16365d7fdd08cf7dd85.jpg?imwidth=1260",
+        "https://image.hm.com/assets/hm/c2/c5/c2c516da48299eb461b9a16365d7fdd08cf7dd85.jpg?imwidth=1260"
+      ],
+      "isActive": true,
+      "created_at": "2025-09-24T11:00:00Z",
+      "rating": 4.6,
+      "isNewArrival": false,
+      "isTopSelling": true,
+      "brand": "UrbanWear",
+      "colors": [
+        "Beige",
+        "Navy",
+        "Olive"
+      ],
+      "sizes": [
+        "30",
+        "32",
+        "34",
+        "36"
+      ]
+    },
+    {
+      "id": "12",
+      "name": "Hooded Sweatshirt",
+      "description": "Cozy hooded sweatshirt with kangaroo pocket and soft fleece lining.",
+      "price": 2200,
+      "count": 29,
+      "category": "Hoodie",
+      "images": [
+        "https://static.zara.net/assets/public/304c/1a23/b4cc4ead9289/003f403d90e9/01437360529-e1/01437360529-e1.jpg?ts=1756300878555&w=750",
+        "https://static.zara.net/assets/public/304c/1a23/b4cc4ead9289/003f403d90e9/01437360529-e1/01437360529-e1.jpg?ts=1756300878555&w=750"
+      ],
+      "isActive": true,
+      "created_at": "2025-09-24T11:00:00Z",
+      "rating": 4.8,
+      "isNewArrival": true,
+      "isTopSelling": false,
+      "brand": "StreetMode",
+      "colors": [
+        "Gray",
+        "Black",
+        "Maroon"
+      ],
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ]
+    },
+    {
+      "id": "46b7",
+      "name": "Regular Fit Shirt",
+      "price": 2099,
+      "count": 3,
+      "category": "Shirt",
+      "brand": "H&M",
+      "description": "Shirt in a soft weave with a turn-down collar, classic front, yoke at the back and an open chest pocket. Long sleeves with buttoned cuffs and a sleeve placket with a link button. Gently rounded hem. Regular fit for comfortable wear and a classic silhouette.",
+      "images": [
+        "https://image.hm.com/assets/hm/16/fb/16fb41d8383ed439b556ed869e8287aee427bd60.jpg?imwidth=1260"
+      ],
+      "rating": 4.5,
+      "isNewArrival": true,
+      "isTopSelling": false,
+      "created_at": "2025-09-29T03:58:28.818Z",
+      "colors": [],
+      "sizes": []
+    },
+    {
+      "id": "855f",
+      "name": "Regular Fit Resort shirt",
+      "price": 2099,
+      "count": 6,
+      "category": "Shirt",
+      "brand": "H&M",
+      "description": "Short-sleeved shirt in a soft weave with a resort collar, French front and an open chest pocket. Straight-cut hem with a small slit on each side. Regular fit for comfortable wear and a classic silhouette.",
+      "images": [
+        "https://image.hm.com/assets/hm/62/88/62888de3c1e8822a2c503d53f029a49afb706229.jpg?imwidth=1260"
+      ],
+      "rating": 4.5,
+      "isNewArrival": true,
+      "isTopSelling": false,
+      "created_at": "2025-09-29T04:09:02.205Z",
+      "colors": [],
+      "sizes": []
+    },
+    {
+      "id": "3f67",
+      "name": "Loose Jeans",
+      "price": 1799,
+      "count": 6,
+      "category": "Jeans",
+      "brand": "H&M",
+      "description": "5-pocket jeans in rigid cotton denim with a rounded leg and a loose fit from the seat to the hem with a dropped crotch and extra room around the whole leg. Regular waist and a zip fly. These will be your new favourites.",
+      "images": [
+        "https://image.hm.com/assets/hm/bd/ab/bdab4f200e36a1c4c723fcc2d3d9cf48c92e5b23.jpg?imwidth=1260"
+      ],
+      "rating": 4.5,
+      "isNewArrival": true,
+      "isTopSelling": false,
+      "created_at": "2025-09-29T04:13:36.398Z",
+      "colors": [],
+      "sizes": []
+    },
+    {
+      "id": "7031",
+      "name": "T-shirt with Tape Details",
+      "price": 1200,
+      "count": 15,
+      "category": "T-Shirt",
+      "brand": "UrbanWear",
+      "description": "",
+      "images": [
+        "https://image.hm.com/assets/hm/05/66/05664a801dd930fcfcee8bc419221598e426794b.jpg?imwidth=1260"
+      ],
+      "rating": 4.5,
+      "isNewArrival": true,
+      "isTopSelling": false,
+      "created_at": "2025-10-04T06:26:31.895Z",
+      "colors": [],
+      "sizes": []
+    },
+    {
+      "id": "d2ff",
+      "name": "WASHED CABLE-KNIT SWEATER",
+      "price": 4300,
+      "count": 4,
+      "category": "T-Shirt",
+      "brand": "Zara",
+      "description": "Relaxed fit sweater made of spun cotton fabric. Featuring a round neck, long sleeves, a washed effect and ribbed trims.",
+      "images": [
+        "https://static.zara.net/assets/public/493b/c043/d73b4bb58131/ec06f0c7ca63/02621306800-e1/02621306800-e1.jpg?ts=1758005833188&w=750"
+      ],
+      "rating": 4.5,
+      "isNewArrival": true,
+      "isTopSelling": false,
+      "created_at": "2025-10-04T07:45:31.894Z",
+      "colors": [],
+      "sizes": []
+    },
+    {
+      "id": "4c92",
+      "name": "PRINTED SHEEPSKIN LEATHER JACKET",
+      "price": 4999,
+      "count": 3,
+      "category": "Jacket",
+      "brand": "Zara",
+      "description": "Cropped fit jacket made of leather with a printed sheepskin finish. Featuring a lapel collar and long sleeves. Side in-seam pockets. Button-up front.",
+      "images": [
+        "https://static.zara.net/assets/public/147d/0a9a/ca614b8c9da1/21266c61e0bf/02521302064-e1/02521302064-e1.jpg?ts=1758542168255&w=750"
+      ],
+      "rating": 5,
+      "isNewArrival": true,
+      "isTopSelling": false,
+      "created_at": "2025-10-08T06:58:06.585Z",
+      "colors": [],
+      "sizes": []
+    }
+  ],
+  "brands": [
+    {
+      "id": "1",
+      "name": "Prada",
+      "logo": "https://logos-world.net/wp-content/uploads/2020/05/Prada-Symbol-700x394.png"
+    },
+    {
+      "id": "2",
+      "name": "Zara",
+      "logo": "https://logos-world.net/wp-content/uploads/2020/05/Zara-Logo-2008-2019-700x394.png"
+    },
+    {
+      "id": "3",
+      "name": "L'Oréal",
+      "logo": "https://logos-world.net/wp-content/uploads/2020/04/LOreal-Logo-700x394.png"
+    },
+    {
+      "id": "4",
+      "name": "Christian Dior",
+      "logo": "https://logos-world.net/wp-content/uploads/2021/08/Christian-Dior-Logo-700x394.png"
+    },
+    {
+      "id": "5",
+      "name": "Calvin Klein",
+      "logo": "https://logos-world.net/wp-content/uploads/2020/05/Calvin-Klein-Logo-700x394.png"
+    }
+  ],
+  "orders": [
+    {
+      "id": "c80c",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "4",
+          "name": "Sleeve Striped T-shirt",
+          "price": 1300,
+          "quantity": 4,
+          "image": "https://image.hm.com/assets/hm/a2/e1/a2e17e5847c3535628cabb27f41d78ceef944966.jpg?imwidth=1260"
+        }
+      ],
+      "total": 5200,
+      "orderDate": "2025-10-04T07:08:09.811Z",
+      "status": "Delivered"
+    },
+    {
+      "id": "aee3",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "7",
+          "name": "Loose Fit Bermuda Shorts",
+          "price": 900,
+          "quantity": 6,
+          "image": "https://image.hm.com/assets/hm/2a/56/2a56fd53f7ac7d1618087e8b352a6b8a77029ef0.jpg?imwidth=1260"
+        }
+      ],
+      "total": 5400,
+      "orderDate": "2025-10-04T07:26:34.628Z",
+      "status": "Delivered"
+    },
+    {
+      "id": "06f3",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "3",
+          "name": "Checkered Shirt",
+          "price": 1800,
+          "quantity": 1,
+          "image": "https://image.hm.com/assets/hm/84/de/84de62aceda9354cd420b837c82f44a85cf6b36d.jpg?imwidth=1260"
+        },
+        {
+          "id": "2",
+          "name": "Skinny Fit Jeans",
+          "price": 2400,
+          "quantity": 2,
+          "image": "https://image.hm.com/assets/hm/a1/eb/a1eb4df1bac12aa1f7c1684bb78c191fd90ed286.jpg?imwidth=1260"
+        },
+        {
+          "id": "3f67",
+          "name": "Loose Jeans",
+          "price": 1799,
+          "quantity": 1,
+          "image": "https://image.hm.com/assets/hm/bd/ab/bdab4f200e36a1c4c723fcc2d3d9cf48c92e5b23.jpg?imwidth=1260"
+        }
+      ],
+      "total": 8399,
+      "orderDate": "2025-10-04T07:28:02.801Z",
+      "status": "Pending"
+    },
+    {
+      "id": "c60c",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "9",
+          "name": "Classic Polo Shirt",
+          "price": 1500,
+          "quantity": 1,
+          "image": "https://static.zara.net/assets/public/4596/7a87/d53345b2a64c/15a6bf6fe7bf/06674322704-e1/06674322704-e1.jpg?ts=1756121712654&w=750"
+        }
+      ],
+      "total": 1500,
+      "orderDate": "2025-10-07T10:55:53.576Z",
+      "status": "Pending"
+    },
+    {
+      "id": "3059",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "4c92",
+          "name": "PRINTED SHEEPSKIN LEATHER JACKET",
+          "price": 4999,
+          "quantity": 1,
+          "image": "https://static.zara.net/assets/public/147d/0a9a/ca614b8c9da1/21266c61e0bf/02521302064-e1/02521302064-e1.jpg?ts=1758542168255&w=750"
+        }
+      ],
+      "total": 4999,
+      "orderDate": "2025-10-08T08:07:03.488Z",
+      "status": "Pending"
+    },
+    {
+      "id": "5827",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "4c92",
+          "name": "PRINTED SHEEPSKIN LEATHER JACKET",
+          "price": 4999,
+          "quantity": 1,
+          "image": "https://static.zara.net/assets/public/147d/0a9a/ca614b8c9da1/21266c61e0bf/02521302064-e1/02521302064-e1.jpg?ts=1758542168255&w=750"
+        }
+      ],
+      "total": 4999,
+      "orderDate": "2025-10-08T08:07:32.338Z",
+      "status": "Pending"
+    },
+    {
+      "id": "f622",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "4c92",
+          "name": "PRINTED SHEEPSKIN LEATHER JACKET",
+          "price": 4999,
+          "quantity": 1,
+          "image": "https://static.zara.net/assets/public/147d/0a9a/ca614b8c9da1/21266c61e0bf/02521302064-e1/02521302064-e1.jpg?ts=1758542168255&w=750"
+        }
+      ],
+      "total": 4999,
+      "orderDate": "2025-10-08T08:09:50.022Z",
+      "status": "Pending"
+    },
+    {
+      "id": "9a27",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "koduvally",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "4c92",
+          "name": "PRINTED SHEEPSKIN LEATHER JACKET",
+          "price": 4999,
+          "quantity": 1,
+          "image": "https://static.zara.net/assets/public/147d/0a9a/ca614b8c9da1/21266c61e0bf/02521302064-e1/02521302064-e1.jpg?ts=1758542168255&w=750"
+        }
+      ],
+      "total": 4999,
+      "orderDate": "2025-10-08T08:10:11.485Z",
+      "status": "Pending"
+    },
+    {
+      "id": "06b4",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "4c92",
+          "name": "PRINTED SHEEPSKIN LEATHER JACKET",
+          "price": 4999,
+          "quantity": 1,
+          "image": "https://static.zara.net/assets/public/147d/0a9a/ca614b8c9da1/21266c61e0bf/02521302064-e1/02521302064-e1.jpg?ts=1758542168255&w=750"
+        }
+      ],
+      "total": 4999,
+      "orderDate": "2025-10-08T08:10:46.329Z",
+      "status": "Pending"
+    },
+    {
+      "id": "16c4",
+      "userId": "3",
+      "customerInfo": {
+        "name": "Anjal",
+        "email": "gamexanjalx@gmail.com",
+        "address": "Kachery",
+        "paymentMethod": "card"
+      },
+      "items": [
+        {
+          "id": "4c92",
+          "name": "PRINTED SHEEPSKIN LEATHER JACKET",
+          "price": 4999,
+          "quantity": 3,
+          "image": "https://static.zara.net/assets/public/147d/0a9a/ca614b8c9da1/21266c61e0bf/02521302064-e1/02521302064-e1.jpg?ts=1758542168255&w=750"
+        }
+      ],
+      "total": 14997,
+      "orderDate": "2025-10-08T08:11:09.850Z",
+      "status": "Pending"
+    }
+  ]
+}
