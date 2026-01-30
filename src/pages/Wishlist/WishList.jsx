@@ -26,15 +26,16 @@ const TrashIcon = (props) => (
 
 // --- Reusable Wishlist Item Component for a cleaner structure ---
 const WishlistItem = ({ item, onAddToCart, onRemove, onNavigate }) => {
-  const isOutOfStock = !item.count || item.count <= 0;
+  const quantity = item.stock_quantity !== undefined ? item.stock_quantity : (item.count || 0);
+  const isOutOfStock = quantity <= 0;
 
   // Determine stock status and corresponding styles
   const getStockInfo = () => {
     if (isOutOfStock) {
       return { text: "Out of Stock", className: "text-red-500" };
     }
-    if (item.count <= 10) {
-      return { text: "Low Stock", className: "text-yellow-600" };
+    if (quantity <= 10) {
+      return { text: `Low Stock (${quantity} left)`, className: "text-yellow-600" };
     }
     return { text: "In Stock", className: "text-green-600" };
   };
@@ -44,7 +45,7 @@ const WishlistItem = ({ item, onAddToCart, onRemove, onNavigate }) => {
   return (
     <div className="flex flex-col sm:flex-row items-center bg-white p-4 rounded-xl shadow-md border border-gray-200 gap-6 transition-shadow hover:shadow-lg">
       <img
-        src={item.images?.[0] || "https://via.placeholder.com/300x300?text=No+Image"}
+        src={item.image || "https://via.placeholder.com/300x300?text=No+Image"}
         alt={item.name || "Product Image"}
         className="w-32 h-32 object-cover rounded-lg flex-shrink-0 cursor-pointer"
         onClick={onNavigate}
@@ -55,7 +56,7 @@ const WishlistItem = ({ item, onAddToCart, onRemove, onNavigate }) => {
       />
 
       <div className="flex-1 text-center sm:text-left">
-        <p className="text-sm text-gray-500">{item.brand || 'Brand'}</p>
+        <p className="text-sm text-gray-500">{item.category?.name || item.category || 'Category'}</p>
         <h3
           className="text-lg font-bold text-gray-800 cursor-pointer hover:text-indigo-600"
           onClick={onNavigate}

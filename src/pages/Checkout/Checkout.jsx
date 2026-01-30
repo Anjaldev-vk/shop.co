@@ -20,9 +20,10 @@ const Checkout = () => {
       return sourceItems.map(it => ({
         id: String(it.id),
         name: it.name,
-        price: it.discountedPrice ?? it.price ?? 0,
+        // it.price should already be final price from contexts (Cart/Product)
+        price: it.final_price || it.price || 0, 
         quantity: it.quantity ?? 1,
-        image: it.images?.[0] || null,
+        image: it.image || it.images?.[0] || null,
       }));
     };
     setCheckoutItems(getInitialItems());

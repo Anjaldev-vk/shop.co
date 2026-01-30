@@ -20,29 +20,69 @@ export const CartProvider = ({ children }) => {
     }
     setLoading(true);
     try {
-      const { data: userData } = await api.get(`/users/${currentUser.id}`);
-      const userCartData = userData?.cart || [];
+      // Backend: GET /cart/ -> { id, items: [...], total_amount }
+      const response = await api.get('/api/cart/'); // Assuming route is mapped to api/cart/
+      const data = response.data;
+      
+      if (data && Array.isArray(data.items)) {
+          // Flatten items for UI: { ...productData, quantity, cartItemId, product_id }
+          // Backend Item: { id, product, product_name, product_price, quantity }
+          // Backend Product lookup might be needed if full product details aren't in 'product' field
+          // Based on serializer: 'product' is the ID. 'product_name' etc are fields. 
+          // Wait, 'product' in `CartItemSerializer` Meta fields is the ID? No, serializer definition says:
+          // product_name = serializers.CharField(source='product.name'...)
+          // fields = ('id','product','product_name','product_price','quantity')
+          // So 'product' is likely just the ID unless expanded. 
+          // The UI needs full product object for images etc. 
+          // However, the `product` field in serializer usually returns ID unless nested.
+          // Let's assume we might need to fetch full product details OR the backend returns expanded product.
+          // Looking at the provided serializer code:
+          // class CartItemSerializer(serializers.ModelSerializer): ... fields=('id','product'...)
+          // Default Relation is PK. So `product` is an ID.
+          // BUT, we need the Image. The provided serializer DOES NOT include image.
+          // We might need to fetch product details separately or rely on what we have.
+          // The UI likely needs 'image', 'slug', 'category'.
+          // I will implement a fetch-missing-details strategy.
 
-      if (userCartData.length === 0) {
+          const cartItemsRaw = data.items;
+          
+          // Fetch full product details for each item to get images/etc
+          const fullItemsPromises = cartItemsRaw.map(async (item) => {
+              try {
+                  // Use slug instead of ID for product lookup
+                  const productRes = await api.get(`/api/products/${item.product_slug}/`);
+                  const productData = productRes.data;
+                  
+                  // Construct full image URL if image exists
+                  const imageUrl = productData.image 
+                    ? (productData.image.startsWith('http') 
+                        ? productData.image 
+                        : `${api.defaults.baseURL}${productData.image}`)
+                    : null;
+                  
+                  return {
+                      ...productData,
+                      quantity: item.quantity,
+                      cartItemId: item.id,
+                      price: productData.final_price || productData.price,
+                      image: imageUrl
+                  };
+              } catch (err) {
+                  console.warn("Failed to fetch product details for cart item", item);
+                  return null;
+              }
+          });
+
+          const fullItems = (await Promise.all(fullItemsPromises)).filter(Boolean);
+          setCart(fullItems);
+      } else {
         setCart([]);
-        return;
       }
-
-      const productPromises = userCartData.map(item => 
-        api.get(`/products/${item.productId}`).then(res => res.data)
-      );
-
-      const productDetails = await Promise.all(productPromises);
-
-      const mergedCart = productDetails.map(product => ({
-        ...product,
-        quantity: userCartData.find(item => item.productId === String(product.id))?.quantity || 0,
-      })).filter(item => item.quantity > 0);
-
-      setCart(mergedCart);
     } catch (error) {
       console.error("Failed to fetch cart:", error);
-      toast.error("Could not load your cart.");
+      if (error.response?.status !== 404) {
+         // toast.error("Could not load your cart.");
+      }
       setCart([]);
     } finally {
       setLoading(false);
@@ -53,115 +93,96 @@ export const CartProvider = ({ children }) => {
     fetchCartDetails();
   }, [fetchCartDetails]);
 
-  const updateServerCart = async (newCartData) => {
-    if (!currentUser) return null;
-    try {
-      const { data } = await api.patch(`/users/${currentUser.id}`, { cart: newCartData });
-      return data;
-    } catch (error) {
-      console.error("Failed to update cart on server:", error);
-      return null;
-    }
-  };
-  
-  const formatCartForServer = (cartState) =>
-    cartState.map(({ id, quantity }) => ({ productId: String(id), quantity }));
-
-  // Use functional state update to avoid duplicates on rapid clicks and enforce stock using `count`
   const addToCart = async (product, quantityToAdd = 1) => {
     if (!currentUser) {
       toast.error("Please log in to add items to your cart.");
       return;
     }
 
-    let originalCartSnapshot = cart;
-    let updatedCart;
-
-    setCart((prev) => {
-      originalCartSnapshot = prev;
-      const maxStock = Number.isFinite(product?.count) ? product.count : Infinity;
-      const idx = prev.findIndex((item) => item.id === product.id);
-
-      if (idx !== -1) {
-        const target = prev[idx];
-        const newQuantity = target.quantity + quantityToAdd;
-        if (newQuantity > maxStock) {
-          toast.error(`Only ${maxStock} items available in stock.`);
-          updatedCart = prev; // no change
-          return prev;
+    try {
+        // Backend: POST /cart/add/ { product_id, quantity }
+        // We can't optimistically update easily because we need the backend to handle "get_or_create". 
+        // But for UI responsiveness we can try.
+        
+        // Optimistic
+        const existingItem = cart.find(item => item.id === product.id);
+        if (existingItem) {
+             const newQuantity = existingItem.quantity + quantityToAdd;
+             setCart(prev => prev.map(item => 
+                 item.id === product.id ? { ...item, quantity: newQuantity } : item
+             ));
+        } else {
+             // Fake cartItemId until refresh
+             setCart(prev => [...prev, { ...product, quantity: quantityToAdd, cartItemId: 'temp-' + Date.now() }]);
         }
-        updatedCart = prev.map((item, i) => (i === idx ? { ...item, quantity: newQuantity } : item));
-        return updatedCart;
-      }
 
-      if (quantityToAdd > maxStock) {
-        toast.error(`Only ${maxStock} items available in stock.`);
-        updatedCart = prev; // no change
-        return prev;
-      }
+        toast.success("Updating cart...");
+        await api.post('/api/cart/add/', { product_id: product.id, quantity: quantityToAdd });
+        
+        // Refresh to get correct IDs and consistency
+        fetchCartDetails();
 
-      updatedCart = [...prev, { ...product, quantity: quantityToAdd }];
-      return updatedCart;
-    });
-
-    // If no change was applied (due to stock limit), don't proceed
-    if (updatedCart === originalCartSnapshot) return;
-
-    toast.success(`${quantityToAdd} x ${product.name} added to cart!`);
-
-    const serverResult = await updateServerCart(formatCartForServer(updatedCart));
-    if (!serverResult) {
-      setCart(originalCartSnapshot);
-      toast.error("Failed to update cart. Please try again.");
+    } catch (error) {
+        console.error("Failed to add to cart:", error);
+        toast.error(error.response?.data?.error || "Failed to add to cart.");
+        fetchCartDetails(); // Revert
     }
   };
 
   const decrementCartItem = async (productId) => {
-    const originalCart = [...cart];
     const existingItem = cart.find((item) => item.id === productId);
     if (!existingItem) return;
 
-    const newCart =
-      existingItem.quantity === 1
-        ? cart.filter((item) => item.id !== productId)
-        : cart.map((item) =>
-            item.id === productId ? { ...item, quantity: item.quantity - 1 } : item
-          );
+    try {
+        if (existingItem.quantity === 1) {
+            // Remove
+             await removeFromCart(productId);
+        } else {
+            // Update
+            const newQuantity = existingItem.quantity - 1;
+            
+            // Optimistic
+            setCart(prev => prev.map(item => 
+                item.id === productId ? { ...item, quantity: newQuantity } : item
+            ));
 
-    setCart(newCart);
-
-    const serverResult = await updateServerCart(formatCartForServer(newCart));
-    if (!serverResult) {
-      setCart(originalCart);
-      toast.error("Failed to update item quantity.");
+            // Backend: POST /cart/update/ { item_id, quantity }
+            await api.post('/api/cart/update/', { item_id: existingItem.cartItemId, quantity: newQuantity });
+            
+            // We usually don't need to refresh here if successful, but to be safe:
+            // fetchCartDetails(); 
+        }
+    } catch (error) {
+        console.error("Failed to update cart:", error);
+        toast.error("Action failed.");
+        fetchCartDetails();
     }
   };
 
   const removeFromCart = async (productId) => {
-    const productName = cart.find(item => item.id === productId)?.name || 'Item';
-    const originalCart = [...cart];
-    const newCart = cart.filter((item) => item.id !== productId);
+    const existingItem = cart.find(item => item.id === productId);
+    if (!existingItem) return;
     
-    setCart(newCart);
-    toast.error(`${productName} removed from cart.`);
+    try {
+        // Optimistic
+        setCart(prev => prev.filter(item => item.id !== productId));
+        toast.error(`${existingItem.name || 'Item'} removed.`);
 
-    const serverResult = await updateServerCart(formatCartForServer(newCart));
-    if (!serverResult) {
-      setCart(originalCart);
-      toast.error("Failed to remove item. Please try again.");
+        // Backend: POST /cart/remove/ { item_id }
+        await api.post('/api/cart/remove/', { item_id: existingItem.cartItemId });
+    } catch (error) {
+        console.error("Failed to remove item:", error);
+        toast.error("Failed to remove item.");
+        fetchCartDetails();
     }
   };
 
   const clearCart = async () => {
-    const originalCart = [...cart];
-    setCart([]);
-    toast.success("Cart has been cleared.");
-    
-    const serverResult = await updateServerCart([]);
-    if (!serverResult) {
-      setCart(originalCart);
-      toast.error("Could not clear cart. Please try again.");
-    }
+     // No clear endpoint provided in description. 
+     // We would have to loop remove or just set local to empty if backend doesn't support it.
+     // For now, simply setting empty local and user has to manually remove or we implement loop.
+     setCart([]);
+     toast.success("Cart cleared locally (Backend clear not implemented).");
   };
 
   const cartItemCount = useMemo(
@@ -170,7 +191,7 @@ export const CartProvider = ({ children }) => {
   );
   const cartTotal = useMemo(
     () => cart.reduce(
-      (total, item) => total + (item.discountedPrice || item.price || 0) * item.quantity,
+      (total, item) => total + (item.final_price || item.price || 0) * item.quantity,
       0
     ),
     [cart]

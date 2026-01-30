@@ -3,7 +3,7 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -17,8 +17,8 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!username || !password) {
-      setError("Please enter both username and password.");
+    if (!email || !password) {
+      setError("Please enter both email and password.");
       return;
     }
 
@@ -26,7 +26,7 @@ const Login = () => {
     setError("");
 
     try {
-      const loggedInUser = await login(username, password);
+      const loggedInUser = await login(email, password);
 
       // Redirect based on user role after successful login
       if (loggedInUser?.role === 'admin') {
@@ -36,9 +36,12 @@ const Login = () => {
       }
 
     } catch (err) {
-      // This will catch and display any error from the login context,
-      // including "You were blocked by admin."
-      setError(err.message || "An unexpected error occurred.");
+      // Check for specific error message for unverified account
+      if (err.error === "Account not verified") {
+          navigate('/verify-otp', { state: { email } });
+          return;
+      }
+      setError(err.error || err.message || "An unexpected error occurred.");
     } finally {
       setIsLoading(false);
     }
@@ -55,10 +58,10 @@ const Login = () => {
           <div className="relative">
             <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-black" />
             <input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full py-3 pl-12 pr-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300 shadow-sm"
               required
             />
@@ -81,6 +84,12 @@ const Login = () => {
             >
               {showPassword ? <EyeOffIcon /> : <EyeIcon />}
             </button>
+          </div>
+
+          <div className="flex justify-end">
+            <Link to="/forgot-password" class="text-sm text-indigo-600 hover:underline">
+              Forgot Password?
+            </Link>
           </div>
 
           {error && (

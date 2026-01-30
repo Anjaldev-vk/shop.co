@@ -38,7 +38,7 @@ const Profile = () => {
     const fetchOrderStats = async () => {
       setIsLoadingStats(true);
       try {
-        const response = await api.get(`/orders?userId=${currentUser.id}`);
+        const response = await api.get(`api/orders?userId=${currentUser.id}`);
         const totalItems = response.data.reduce((total, order) => 
             total + order.items.reduce((itemTotal, item) => itemTotal + item.quantity, 0), 0);
         setOrderedItemsCount(totalItems);
@@ -87,9 +87,9 @@ const Profile = () => {
                     <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col h-full">
                         <div className="text-center mb-8">
                             <div className="w-24 h-24 mx-auto bg-gradient-to-br from-indigo-200 to-purple-200 rounded-full flex items-center justify-center text-4xl font-bold text-indigo-700 mb-2">
-                                {currentUser.username.charAt(0).toUpperCase()}
+                                {currentUser.name.charAt(0).toUpperCase()}
                             </div>
-                            <h2 className="text-xl font-bold text-gray-800">{currentUser.username}</h2>
+                            <h2 className="text-xl font-bold text-gray-800">{currentUser.name}</h2>
                             <p className="text-sm text-gray-500">{currentUser.email}</p>
                         </div>
 
@@ -116,7 +116,7 @@ const Profile = () => {
                     <div className="bg-white p-8 rounded-xl shadow-md border border-gray-200">
                         <h1 className="text-3xl font-bold text-gray-900 mb-6">Account Overview</h1>
                         <p className="text-gray-600 mb-8">
-                            Welcome back, {currentUser.username}! Here's a summary of your account activity.
+                            Welcome back, {currentUser.name}! Here's a summary of your account activity.
                         </p>
                         
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

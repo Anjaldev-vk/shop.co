@@ -20,6 +20,9 @@ import WishlistPage from './pages/Wishlist/WishList';
 import Profile from './pages/Profile/Profile';
 import Login from './pages/Login/Login';
 import Signup from './pages/Signup/Signup';
+import VerifyOTP from './pages/Signup/VerifyOTP';
+import ForgotPassword from './pages/Login/ForgotPassword';
+import ResetPassword from './pages/Login/ResetPassword';
 import Checkout from './pages/Checkout/Checkout';
 import OrderSuccess from './pages/Checkout/OrderSuccess';
 import About from './pages/About/About';
@@ -59,12 +62,15 @@ function App() {
                   <Route path="/" element={<HomePage />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<Signup />} />
+                  <Route path="/verify-otp" element={<VerifyOTP />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="/products" element={<ProductList />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/contact" element={<ContactPage />} />
 
                   {/* Protected routes (login required) */}
-                  <Route path="/products/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
+                  <Route path="/products/:slug" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
                   <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
                   <Route path="/wishlist" element={<ProtectedRoute><WishlistPage /></ProtectedRoute>} />
                   <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />

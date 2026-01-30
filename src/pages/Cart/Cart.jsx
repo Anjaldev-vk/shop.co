@@ -136,11 +136,8 @@ const Cart = () => {
     );
   }
 
-  const getItemPrice = (item) => item.discountedPrice ?? item.price ?? 0;
-
-  const calculateTotal = () =>
-    cart
-      .reduce((acc, item) => acc + getItemPrice(item) * (item.quantity || 1), 0);
+  // Use cartTotal from context if available, or simpler calculation
+  const totalAmount = cart.reduce((acc, item) => acc + (item.price || 0) * (item.quantity || 1), 0);
 
   // This is the section for when the cart has items.
   return (
@@ -151,17 +148,17 @@ const Cart = () => {
         {cart.map((item) => (
           <div key={item.id} className="flex flex-col sm:flex-row items-center bg-white rounded-lg shadow p-4 gap-4">
             <img
-              src={item.images?.[0] || "https://via.placeholder.com/120"}
+              src={item.image || "https://via.placeholder.com/120"}
               alt={item.name || "Product Image"}
               className="w-24 h-24 object-cover rounded-md"
             />
             <div className="ml-4 flex-1 text-center sm:text-left">
               <h3 className="text-lg font-semibold">{item.name || "Unnamed Product"}</h3>
               <p className="text-gray-600">
-                Price: {formatPrice(getItemPrice(item))} × {item.quantity || 1}
+                Price: {formatPrice(item.price)} × {item.quantity || 1}
               </p>
               <p className="text-gray-800 font-bold">
-                Total: {formatPrice(getItemPrice(item) * (item.quantity || 1))}
+                Total: {formatPrice((item.price || 0) * (item.quantity || 1))}
               </p>
 
               {/* Increment / Decrement Buttons */}
@@ -203,7 +200,7 @@ const Cart = () => {
 
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto justify-between md:justify-end">
           <p className="text-xl font-bold text-gray-800">
-            Total: {formatPrice(calculateTotal())}
+            Total: {formatPrice(totalAmount)}
           </p>
           <button
             onClick={() => navigate("/checkout")}

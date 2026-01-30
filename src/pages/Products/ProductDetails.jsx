@@ -9,7 +9,7 @@ import { formatPrice } from "../../utils/formatPrice";
 import StarRating from "../../components/StarRating";
 
 const ProductDetails = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const { addToCart } = useCart();
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const navigate = useNavigate();
@@ -25,11 +25,11 @@ const ProductDetails = () => {
     ? wishlist.some((item) => item.id === product.id)
     : false;
 
-  const isOutOfStock = product && product.count <= 0;
+  const isOutOfStock = product && product.stock_quantity <= 0;
 
   useEffect(() => {
-    if (!id) {
-      setError("No product ID provided.");
+    if (!slug) {
+      setError("No product slug provided.");
       setLoading(false);
       return;
     }
@@ -38,7 +38,7 @@ const ProductDetails = () => {
       setLoading(true);
       setProduct(null);
       try {
-        const response = await api.get(`/products/${id}`);
+        const response = await api.get(`/api/products/${slug}/`);
         setProduct(response.data);
         // 2. Set the first available size as the default selected size
         if (response.data.sizes && response.data.sizes.length > 0) {
@@ -54,7 +54,7 @@ const ProductDetails = () => {
     };
 
     fetchProduct();
-  }, [id]);
+  }, [slug]);
 
 
   const handleAddToCart = () => {
@@ -100,7 +100,7 @@ const ProductDetails = () => {
             {/* Image Section */}
             <div className="w-full h-[450px] bg-gray-50 rounded-xl flex items-center justify-center p-4">
               <img
-                src={product.images?.[0] || "https://via.placeholder.com/500x500?text=No+Image"}
+                src={product.image || "https://via.placeholder.com/500x500?text=No+Image"}
                 alt={product.name}
                 className="max-w-full max-h-full object-contain"
               />
@@ -109,23 +109,35 @@ const ProductDetails = () => {
             {/* Details Section */}
             <div className="flex flex-col justify-between">
               <div>
-                <p className="text-indigo-600 font-semibold mb-2">{product.brand || 'N/A'}</p>
+                <p className="text-indigo-600 font-semibold mb-2">{product.category && product.category.name ? product.category.name : (product.category || 'Category')}</p>
                 <h1 className="text-4xl font-extrabold text-gray-900 mb-4">{product.name}</h1>
                 
-                {product.rating && (
-                  <div className="flex items-center mb-5">
-                    <StarRating rating={product.rating} size="text-2xl" />
-                    <span className="ml-3 text-gray-600 font-medium">{product.rating}/5</span>
-                  </div>
-                )}
+                {/* Rating - Fallback because backend doesn't have it */}
+                <div className="flex items-center mb-5">
+                    <StarRating rating={product.rating || 4.5} size="text-2xl" />
+                    <span className="ml-3 text-gray-600 font-medium">{product.rating || 4.5}/5</span>
+                </div>
                 
-                <p className="text-4xl font-bold text-gray-900 mb-6">
-                  {formatPrice(product.price)}
-                </p>
+                <div className="flex flex-col mb-6">
+                     {product.discount_price && product.price > product.discount_price ? (
+                        <>
+                            <p className="text-4xl font-bold text-gray-900">
+                                {formatPrice(product.final_price || product.discount_price)}
+                            </p>
+                            <p className="text-lg text-gray-400 line-through">
+                                {formatPrice(product.price)}
+                            </p>
+                        </>
+                     ) : (
+                        <p className="text-4xl font-bold text-gray-900">
+                            {formatPrice(product.price)}
+                        </p>
+                     )}
+                </div>
                 
                 <p className="text-gray-600 mb-6 leading-relaxed">{product.description}</p>
                 
-                {/* 4. UI Section for Size Selection */}
+                {/* 4. UI Section for Size Selection - Optional/Removed if backend doesn't support sizes */}
                 {product.sizes && product.sizes.length > 0 && (
                   <div className="mb-6">
                     <p className="font-semibold text-gray-800 mb-3 text-lg">Select Size:</p>
@@ -153,7 +165,8 @@ const ProductDetails = () => {
                     <p className="font-semibold text-red-500 text-lg"> Out of Stock</p>
                   ) : (
                     <p className="font-semibold text-green-600">
-                      Only {product.count} left in stock!
+                        {/* Use stock_quantity from backend */}
+                      {product.stock_quantity > 0 ? `Only ${product.stock_quantity} left in stock!` : 'In Stock'}
                     </p>
                   )}
                 </div>
@@ -167,8 +180,8 @@ const ProductDetails = () => {
                     <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-4 py-2 text-lg">-</button>
                     <span className="px-4 py-2 font-bold">{quantity}</span>
                     <button 
-                      onClick={() => setQuantity(prev => Math.min(prev + 1, product.count))}
-                      disabled={quantity >= product.count || isOutOfStock}
+                      onClick={() => setQuantity(prev => Math.min(prev + 1, product.stock_quantity))}
+                      disabled={quantity >= product.stock_quantity || isOutOfStock}
                       className="px-4 py-2 text-lg disabled:text-gray-300 disabled:cursor-not-allowed"
                     >
                       +

@@ -39,7 +39,11 @@ const FilterPanel = ({
         onChange={(e) => setFilters({ ...filters, category: e.target.value })}
       >
         <option value="">All Categories</option>
-        {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+        {categories.map(cat => {
+            const catName = typeof cat === 'object' ? cat.name : cat;
+            const catId = typeof cat === 'object' ? cat.id || cat.name : cat;
+            return <option key={catId} value={catName}>{catName}</option>
+        })}
       </select>
     </FilterSection>
     <FilterSection title="Price Range">
@@ -63,10 +67,10 @@ const FilterPanel = ({
 
 
 const ProductList = () => {
-  const { products, loading, error } = useProducts();
+  const { products, categories, loading, error } = useProducts();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]); // Removed local categories state
   const [sortBy, setSortBy] = useState("default");
   const [filters, setFilters] = useState({
     category: "",
@@ -77,12 +81,12 @@ const ProductList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8); // Changed to 8 for better grid alignment (2 rows on XL)
 
-  useEffect(() => {
-    if (products.length > 0) {
-      const uniqueCategories = [...new Set(products.map(p => p.category))];
-      setCategories(uniqueCategories);
-    }
-  }, [products]);
+  // useEffect(() => {
+  //   if (products.length > 0) {
+  //     const uniqueCategories = [...new Set(products.map(p => p.category))];
+  //     setCategories(uniqueCategories);
+  //   }
+  // }, [products]);
 
   useEffect(() => {
     document.body.style.overflow = isFilterOpen ? 'hidden' : 'auto';
@@ -101,23 +105,27 @@ const ProductList = () => {
       filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
     }
     filtered = filtered.filter(p => {
-      const price = p.discountedPrice || p.price;
+      // Backend uses final_price or price. discount_price might be null.
+      const price = parseFloat(p.final_price || p.price || 0);
+      // Rating is optional/missing from backend, default to 4.5 for now or check if exists
+      const rating = p.rating || 4.5; 
+      
       return (
         (filters.category ? p.category === filters.category : true) &&
         price >= filters.priceRange[0] &&
         price <= filters.priceRange[1] &&
-        p.rating >= filters.minRating
+        rating >= filters.minRating
       );
     });
     switch (sortBy) {
         case 'price-asc':
-          filtered.sort((a, b) => (a.discountedPrice || a.price) - (b.discountedPrice || b.price));
+          filtered.sort((a, b) => (parseFloat(a.final_price || a.price) - parseFloat(b.final_price || b.price)));
           break;
         case 'price-desc':
-          filtered.sort((a, b) => (b.discountedPrice || b.price) - (a.discountedPrice || a.price));
+          filtered.sort((a, b) => (parseFloat(b.final_price || b.price) - parseFloat(a.final_price || a.price)));
           break;
         case 'rating-desc':
-          filtered.sort((a, b) => b.rating - a.rating);
+          filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
           break;
         default: break;
       }

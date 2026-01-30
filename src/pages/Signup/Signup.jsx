@@ -4,19 +4,19 @@ import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 const Signup = () => {
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { signup } = useContext(AuthContext); // Use the signup function from context
+  const { signup } = useContext(AuthContext); 
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setError("");
 
-    if (!username || !email || !password) {
+    if (!name || !email || !password) {
       setError("Please fill in all fields.");
       return;
     }
@@ -28,14 +28,12 @@ const Signup = () => {
     setIsLoading(true);
 
     try {
-      await signup(username, email, password); 
+      await signup(name, email, password); 
 
-      // Navigate to the profile page on successful signup and auto-login
-      navigate("/profile");
+      // Navigate to verify OTP page
+      navigate("/verify-otp", { state: { email } });
     } catch (err) {
-      // The signup function in the context will throw an error if the user exists
       setError(err.message || "Failed to create an account. Please try again.");
-      console.error("Signup error:", err);
     } finally {
       setIsLoading(false);
     }
@@ -50,15 +48,15 @@ const Signup = () => {
 
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
-            <label htmlFor="username" className="sr-only">
-              Username
+            <label htmlFor="name" className="sr-only">
+              Full Name
             </label>
             <input
-              id="username"
+              id="name"
               type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Full Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               required
               className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200"
             />

@@ -43,14 +43,20 @@ const ProductCard = ({ product }) => {
   };
 
   const handleNavigate = () => {
-    if (product && product.id) {
-      navigate(`/products/${product.id}`);
+    if (product && product.slug) {
+      navigate(`/products/${product.slug}`);
     } else {
-      console.error("Attempted to navigate with an invalid product ID.");
+      console.error("Attempted to navigate with an invalid product slug.");
     }
   };
 
   const isInWishlist = wishlist.some((item) => item.id === product.id);
+
+  // Fallbacks for missing backend data
+  const imageUrl = product.image || "https://via.placeholder.com/300x300?text=No+Image";
+  const rating = product.rating || 4.5; // Default rating since backend doesn't have it
+  const reviewCount = product.reviews_count || 0;
+  const brand = product.brand || 'Shop.co'; 
 
   return (
     <motion.div
@@ -61,7 +67,7 @@ const ProductCard = ({ product }) => {
     >
       <div className="relative aspect-w-4 aspect-h-5 w-full overflow-hidden bg-gray-100">
         <img
-          src={product.images?.[0] || "https://via.placeholder.com/300x300?text=No+Image"}
+          src={imageUrl}
           alt={product.name || "Product Image"}
           className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
           onError={(e) => {
@@ -91,29 +97,29 @@ const ProductCard = ({ product }) => {
         </div>
         
         {/* Discount Badge if applicable */}
-        {product.discountedPrice && product.price > product.discountedPrice && (
+        {product.discount_price && product.price > product.discount_price && (
            <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
-             -{Math.round(((product.price - product.discountedPrice) / product.price) * 100)}%
+             -{Math.round(((product.price - product.discount_price) / product.price) * 100)}%
            </div>
         )}
       </div>
 
       <div className="flex flex-1 flex-col p-5">
-        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide mb-1 opacity-70 group-hover:opacity-100 transition-opacity">{product.brand || 'Brand'}</p>
+        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide mb-1 opacity-70 group-hover:opacity-100 transition-opacity">{product.category || brand}</p>
         <h3 className="text-lg font-bold text-gray-900 truncate mb-1 group-hover:text-indigo-600 transition-colors">
           {product.name || "Unnamed Product"}
         </h3>
         
         <div className="flex items-center text-sm mb-3">
-          <StarRating rating={product.rating} size="text-xs" />
-          <span className="ml-2 text-xs text-gray-400 font-medium">({product.rating || 0} reviews)</span>
+          <StarRating rating={rating} size="text-xs" />
+          <span className="ml-2 text-xs text-gray-400 font-medium">({reviewCount} reviews)</span>
         </div>
 
         <div className="flex flex-1 items-end justify-between pt-2 border-t border-gray-50 mt-auto">
-          {product.discountedPrice && product.price > product.discountedPrice ? (
+          {product.discount_price && product.price > product.discount_price ? (
             <div className="flex flex-col">
               <p className="text-lg font-extrabold text-black">
-                {formatPrice(product.discountedPrice)}
+                {formatPrice(product.final_price || product.discount_price)}
               </p>
               <p className="text-xs font-medium text-gray-400 line-through">
                 {formatPrice(product.price)}

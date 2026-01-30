@@ -1,83 +1,137 @@
 import React, { createContext, useState, useEffect } from "react";
 import api from "../api/axiosConfig";
+import { jwtDecode } from "jwt-decode"; // You might need to install this: npm install jwt-decode
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(true);                                                                                                 
+  const [loading, setLoading] = useState(true);
+
+  // Helper to check if token is valid
+  const isTokenValid = (token) => {
+    if (!token) return false;
+    try {
+      const decoded = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      return decoded.exp > currentTime;
+    } catch (error) {
+      return false;
+    }
+  };
 
   useEffect(() => {
     const restoreUserSession = async () => {
-      const userId = localStorage.getItem("userId");
-      if (userId) {
+      const accessToken = sessionStorage.getItem("accessToken");
+      
+      if (accessToken && isTokenValid(accessToken)) {
         try {
-          const response = await api.get(`/users/${userId}`);
-          const user = response.data;
-          if (user && !user.isBlock) {
-            setCurrentUser(user);
-          } else {
-            localStorage.removeItem("userId"); 
-          }
+          // Fetch user profile to ensure token works and get up-to-date info
+          const response = await api.get('api/accounts/profile/');
+          setCurrentUser(response.data); 
         } catch (error) {
           console.error("Failed to restore session:", error);
-          localStorage.removeItem("userId");
+          logout(); 
         }
+      } else {
+        // If token invalid or missing, clear everything
+        sessionStorage.removeItem("accessToken");
+        sessionStorage.removeItem("refreshToken");
       }
       setLoading(false);
     };
+    
     restoreUserSession();
   }, []);
 
-  const login = async (username, password) => {
-    const response = await api.get(`/users?username=${username}&password=${password}`);
-    const users = response.data;
+  const login = async (email, password) => {
+    try {
+      const response = await api.post('api/accounts/login/', { email, password });
+      const { access, refresh, user } = response.data;
 
-    if (users.length === 1) {
-      const user = users[0];
-
-      if (user.isBlock) {
-        throw new Error("You were blocked by admin.");
-      }
+      // Store tokens
+      sessionStorage.setItem("accessToken", access);
+      sessionStorage.setItem("refreshToken", refresh); 
 
       setCurrentUser(user);
-      localStorage.setItem("userId", user.id);
       return user;
-    } else {
-      throw new Error("Invalid username or password.");
+    } catch (error) {
+        // Throw the error response data if available, or a generic message
+        if (error.response && error.response.data) {
+             throw error.response.data; // e.g. { error: "Account not verified" }
+        }
+      throw new Error("Login failed. Please check your credentials.");
     }
   };
   
-  const signup = async (username, email, password) => {
-    const userCheckResponse = await api.get(`/users?username=${username}`);
-    if (userCheckResponse.data.length > 0) {
-      throw new Error("Username is already taken.");
-    }
-    
-    const newUser = {
-      username,
-      email,
-      password,
-      role: "user",
-      isBlock: false,
-      profilePhoto: null,
-      cart: [],
-      orders: [],
-      wishlist: [],
-      created_at: new Date().toISOString(),
-    };
-
-    const createResponse = await api.post('/users', newUser);
-    const createdUser = createResponse.data;
-
-    setCurrentUser(createdUser);
-    localStorage.setItem("userId", createdUser.id);
-    return createdUser;
+  const signup = async (name, email, password) => {
+      try {
+        const response = await api.post('/api/accounts/register/', { name, email, password });
+        return response.data; // { message, email, otp }
+      } catch (error) {
+           if (error.response && error.response.data) {
+                // Return the specific error message from backend if possible
+                const errorMsg = error.response.data.error || Object.values(error.response.data)[0];
+                throw new Error(errorMsg);
+           }
+           throw new Error("Registration failed.");
+      }
   };
+
+  const verifyOtp = async (email, otp) => {
+      try {
+          const response = await api.post('api/accounts/verify-otp/', { email, otp });
+          return response.data;
+      } catch (error) {
+           if (error.response && error.response.data) {
+             throw new Error(error.response.data.error);
+           }
+          throw new Error("Verification failed.");
+      }
+  }
+
+  const resendOtp = async (email) => {
+      try {
+          const response = await api.post('api/accounts/resend-otp/', { email });
+          return response.data;
+      } catch (error) {
+          if (error.response && error.response.data) {
+            throw new Error(error.response.data.error);
+          }
+           throw new Error("Failed to resend OTP.");
+      }
+  }
+
+  const forgotPassword = async (email) => {
+       try {
+        const response = await api.post('api/accounts/password-reset-request/', { email });
+        return response.data;
+       } catch (error) {
+        if (error.response && error.response.data) {
+            throw new Error(error.response.data.error);
+        }
+        throw new Error("Failed to request password reset.");
+       }
+  }
+
+  const resetPassword = async (email, otp, new_password) => {
+      try {
+          const response = await api.post('api/accounts/password-reset-confirm/', { email, otp, new_password });
+          return response.data;
+      } catch (error) {
+           if (error.response && error.response.data) {
+               throw new Error(error.response.data.error);
+           }
+           throw new Error("Password reset failed.");
+      }
+  }
+
 
   const logout = () => {
     setCurrentUser(null);
-    localStorage.removeItem("userId");
+    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("refreshToken");
+    // Optionally call backend logout endpoint if you implemented blacklist
   };
 
   const isAdmin = currentUser?.role === "admin";
@@ -87,6 +141,10 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     signup,
+    verifyOtp,
+    resendOtp,
+    forgotPassword,
+    resetPassword,
     isAdmin,
     loading,
   };
