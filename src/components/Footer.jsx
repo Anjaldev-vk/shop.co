@@ -2,146 +2,85 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-100 py-6 xs:py-8 sm:py-10 px-4 sm:px-6 md:px-8">
-      <div className="max-w-xs xs:max-w-sm sm:max-w-2xl md:max-w-4xl lg:max-w-7xl mx-auto">
-        <div className="bg-black text-white p-4 xs:p-5 sm:p-6 mb-6 xs:mb-8 flex flex-col sm:flex-row justify-between items-center rounded-lg">
-          <div className="mb-4 sm:mb-0 sm:mr-4">
-            <h3 className="text-xl xs:text-2xl sm:text-3xl font-bold text-center sm:text-left">
+    <footer className="bg-black text-white pt-16 pb-8 px-4 sm:px-6 md:px-8 border-t border-gray-800">
+      <div className="max-w-7xl mx-auto">
+        <div className="bg-gradient-to-r from-indigo-900 to-indigo-800 text-white p-8 sm:p-12 mb-16 flex flex-col lg:flex-row justify-between items-center rounded-3xl shadow-2xl relative overflow-hidden">
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+          <div className="relative z-10 mb-8 lg:mb-0 lg:mr-8 max-w-xl">
+            <h3 className="text-3xl sm:text-4xl font-extrabold mb-4 leading-tight">
               STAY UP TO DATE ABOUT OUR LATEST OFFERS
             </h3>
+            <p className="text-indigo-200">Join our newsletter to get exclusive deals and fashion tips.</p>
           </div>
-          <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto space-y-3 sm:space-y-0 sm:space-x-3 bg-slate-100 text-slate-800 p-4 rounded-lg shadow-sm">
-            <input
-              type="email"
-              placeholder="Enter your email address"
-              className="p-2 xs:p-2.5 sm:p-3 w-full sm:w-64 rounded-l-lg sm:rounded-lg border-none outline-none text-black text-sm xs:text-base"
-            />
-            <button className="bg-white text-black p-2 xs:p-2.5 sm:p-3 rounded-r-lg sm:rounded-lg w-full sm:w-auto text-sm xs:text-base">
-              Subscribe to Newsletter
-            </button>
+          <div className="relative z-10 w-full lg:w-auto">
+             <div className="flex flex-col sm:flex-row gap-3 bg-white/10 p-2 rounded-2xl backdrop-blur-sm border border-white/20">
+              <input
+                type="email"
+                placeholder="Enter your email address"
+                className="p-4 w-full sm:w-80 rounded-xl bg-white text-black outline-none focus:ring-2 focus:ring-white/50 placeholder-gray-500"
+              />
+              <button className="bg-white text-black px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition shadow-lg whitespace-nowrap">
+                Subscribe
+              </button>
+            </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 xs:gap-8 text-gray-600">
-          <div>
-            <h4 className="text-lg xs:text-xl font-bold text-black mb-3 xs:mb-4">
+
+        <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 lg:gap-12 text-gray-400 mb-16">
+          <div className="lg:col-span-2">
+            <h4 className="text-3xl font-extrabold text-white mb-6 tracking-tighter">
               SHOP.CO
             </h4>
-            <p className="text-sm xs:text-base">
+            <p className="text-sm leading-relaxed mb-6 max-w-sm">
               We have clothes that suits your style and which you're proud to
               wear. From women to men.
             </p>
-            <div className="flex space-x-3 xs:space-x-4 mt-3 xs:mt-4">
-              <a href="#">
-                <span className="w-5 h-5 xs:w-6 xs:h-6 bg-gray-300 rounded-full inline-block"></span>
-              </a>
-              <a href="#">
-                <span className="w-5 h-5 xs:w-6 xs:h-6 bg-gray-300 rounded-full inline-block"></span>
-              </a>
-              <a href="#">
-                <span className="w-5 h-5 xs:w-6 xs:h-6 bg-gray-300 rounded-full inline-block"></span>
-              </a>
+            <div className="flex space-x-4">
+              {['twitter', 'facebook', 'instagram', 'github'].map((social) => (
+                <a key={social} href="#" className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center hover:bg-white hover:text-black transition-all duration-300 border border-gray-800 hover:border-white">
+                   <span className="sr-only">{social}</span>
+                   {/* Placeholder icons, replace with actual SVGs or FontAwesome */}
+                   <div className="w-5 h-5 bg-current rounded-full opacity-50"></div>
+                </a>
+              ))}
             </div>
           </div>
+          
           <div>
-            <h4 className="text-lg xs:text-xl font-bold text-black mb-3 xs:mb-4">
-              COMPANY
-            </h4>
-            <ul className="space-y-1 xs:space-y-2 text-sm xs:text-base">
-              <li>
-                <a href="#">About</a>
-              </li>
-              <li>
-                <a href="#">Features</a>
-              </li>
-              <li>
-                <a href="#">Works</a>
-              </li>
-              <li>
-                <a href="#">Career</a>
-              </li>
+            <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Company</h4>
+            <ul className="space-y-4 text-sm">
+              {['About', 'Features', 'Works', 'Career'].map((item) => (
+                 <li key={item}><a href="#" className="hover:text-white transition-colors">{item}</a></li>
+              ))}
             </ul>
           </div>
+          
           <div>
-            <h4 className="text-lg xs:text-xl font-bold text-black mb-3 xs:mb-4">
-              HELP
-            </h4>
-            <ul className="space-y-1 xs:space-y-2 text-sm xs:text-base">
-              <li>
-                <a href="#">Customer Support</a>
-              </li>
-              <li>
-                <a href="#">Delivery Details</a>
-              </li>
-              <li>
-                <a href="#">Terms & Conditions</a>
-              </li>
-              <li>
-                <a href="#">Privacy Policy</a>
-              </li>
+            <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Help</h4>
+            <ul className="space-y-4 text-sm">
+              {['Customer Support', 'Delivery Details', 'Terms & Conditions', 'Privacy Policy'].map((item) => (
+                 <li key={item}><a href="#" className="hover:text-white transition-colors">{item}</a></li>
+              ))}
             </ul>
           </div>
+          
           <div>
-            <h4 className="text-lg xs:text-xl font-bold text-black mb-3 xs:mb-4">
-              FAQ
-            </h4>
-            <ul className="space-y-1 xs:space-y-2 text-sm xs:text-base">
-              <li>
-                <a href="#">Account</a>
-              </li>
-              <li>
-                <a href="#">Manage Deliveries</a>
-              </li>
-              <li>
-                <a href="#">Orders</a>
-              </li>
-              <li>
-                <a href="#">Payments</a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-lg xs:text-xl font-bold text-black mb-3 xs:mb-4">
-              RESOURCES
-            </h4>
-            <ul className="space-y-1 xs:space-y-2 text-sm xs:text-base">
-              <li>
-                <a href="#">Free eBooks</a>
-              </li>
-              <li>
-                <a href="#">Development Tutorial</a>
-              </li>
-              <li>
-                <a href="#">How to - Blog</a>
-              </li>
-              <li>
-                <a href="#">Youtube Playlist</a>
-              </li>
+            <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Resources</h4>
+             <ul className="space-y-4 text-sm">
+              {['Free eBooks', 'Development Tutorial', 'How to - Blog', 'Youtube Playlist'].map((item) => (
+                 <li key={item}><a href="#" className="hover:text-white transition-colors">{item}</a></li>
+              ))}
             </ul>
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row justify-between items-center mt-6 xs:mt-8 text-gray-500 text-xs xs:text-sm">
-          <p>Shop.co © 2000-2025. All Rights Reserved</p>
-          <div className="flex space-x-3 xs:space-x-4 mt-3 sm:mt-0">
-            <img
-              src="https://tse2.mm.bing.net/th/id/OIP._VhDEZTT9T5bcaNTLp75pwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"
-              alt="Visa"
-              className="h-6 xs:h-7"
-            />
-            <img
-              src="https://clipground.com/images/visa-mastercard-icon-png-2.jpg"
-              alt="Mastercard"
-              className="h-5 xs:h-6"
-            />
-            <img
-              src="https://tse4.mm.bing.net/th/id/OIP.Wyu_7O9M0lmASmXeTPBxLQHaJF?rs=1&pid=ImgDetMain&o=7&rm=3"
-              alt="PayPal"
-              className="h-4 xs:h-5"
-            />
-            <img
-              src="https://logospng.org/wp-content/uploads/google-pay.png"
-              alt="Google Pay"
-              className="h-5 xs:h-6"
-            />
+        
+        <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-gray-500 text-sm">Shop.co © 2000-2025. All Rights Reserved</p>
+          <div className="flex space-x-4 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-300">
+             <img src="https://tse2.mm.bing.net/th/id/OIP._VhDEZTT9T5bcaNTLp75pwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Visa" className="h-8 bg-white rounded px-1" />
+             <img src="https://clipground.com/images/visa-mastercard-icon-png-2.jpg" alt="Mastercard" className="h-8 bg-white rounded px-1" />
+             <img src="https://tse4.mm.bing.net/th/id/OIP.Wyu_7O9M0lmASmXeTPBxLQHaJF?rs=1&pid=ImgDetMain&o=7&rm=3" alt="PayPal" className="h-8 bg-white rounded px-1" />
+             <img src="https://logospng.org/wp-content/uploads/google-pay.png" alt="Google Pay" className="h-8 bg-white rounded px-1" />
           </div>
         </div>
       </div>

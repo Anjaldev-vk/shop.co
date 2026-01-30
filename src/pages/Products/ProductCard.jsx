@@ -1,7 +1,10 @@
 import React from "react";
+import { motion } from 'framer-motion';
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
+import { formatPrice } from "../../utils/formatPrice";
+import StarRating from "../../components/StarRating";
 
 const HeartIcon = ({ isInWishlist, ...props }) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" fill={isInWishlist ? 'currentColor' : 'none'} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -50,71 +53,87 @@ const ProductCard = ({ product }) => {
   const isInWishlist = wishlist.some((item) => item.id === product.id);
 
   return (
-    <div
-      className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+    <motion.div
+      whileHover={{ y: -8, boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.15)" }}
+      whileTap={{ scale: 0.98 }}
+      className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-2xl transition-all duration-300 cursor-pointer border border-transparent hover:border-black/5"
       onClick={handleNavigate}
     >
-      <div className="relative aspect-w-1 aspect-h-1 w-full overflow-hidden bg-gray-100">
+      <div className="relative aspect-w-4 aspect-h-5 w-full overflow-hidden bg-gray-100">
         <img
           src={product.images?.[0] || "https://via.placeholder.com/300x300?text=No+Image"}
           alt={product.name || "Product Image"}
-          className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+          className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
           onError={(e) => {
             e.target.onerror = null;
             e.target.src = "https://via.placeholder.com/300x300?text=No+Image";
           }}
         />
-        <div className="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button
+        <div className="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-x-2 group-hover:translate-x-0">
+          <motion.button
+            whileHover={{ scale: 1.1, backgroundColor: "#000", color: "#fff" }}
+            whileTap={{ scale: 0.9 }}
             onClick={handleToggleWishlist}
-            className={`p-2 rounded-full transition-colors duration-200 ${isInWishlist ? 'bg-red-500 text-white' : 'bg-white/70 text-gray-700 hover:bg-white'}`}
+            className={`p-2.5 rounded-full shadow-lg transition-colors duration-200 ${isInWishlist ? 'bg-red-500 text-white' : 'bg-white text-gray-900'}`}
             title={isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
           >
-            <HeartIcon isInWishlist={isInWishlist} className="w-6 h-6" />
-          </button>
-          <button
+            <HeartIcon isInWishlist={isInWishlist} className="w-5 h-5" />
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1, backgroundColor: "#000", color: "#fff" }}
+            whileTap={{ scale: 0.9 }}
             onClick={handleAddToCart}
-            className="p-2 rounded-full bg-white/70 text-gray-700 hover:bg-white transition-colors duration-200"
+            className="p-2.5 rounded-full bg-white text-gray-900 shadow-lg transition-colors duration-200"
             title="Add to Cart"
           >
-            <ShoppingBagIcon className="w-6 h-6" />
-          </button>
+            <ShoppingBagIcon className="w-5 h-5" />
+          </motion.button>
         </div>
+        
+        {/* Discount Badge if applicable */}
+        {product.discountedPrice && product.price > product.discountedPrice && (
+           <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+             -{Math.round(((product.price - product.discountedPrice) / product.price) * 100)}%
+           </div>
+        )}
       </div>
 
-      <div className="flex flex-1 flex-col space-y-2 p-4">
-        <p className="text-sm text-gray-500">{product.brand || 'Brand'}</p>
-        <h3 className="text-base font-semibold text-gray-900 truncate">
+      <div className="flex flex-1 flex-col p-5">
+        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide mb-1 opacity-70 group-hover:opacity-100 transition-opacity">{product.brand || 'Brand'}</p>
+        <h3 className="text-lg font-bold text-gray-900 truncate mb-1 group-hover:text-indigo-600 transition-colors">
           {product.name || "Unnamed Product"}
         </h3>
         
-        <div className="flex items-center text-sm">
-          <div className="flex items-center text-yellow-400">
-            {[...Array(5)].map((_, i) => (
-              <span key={i}>{i < Math.floor(product.rating || 0) ? "★" : "☆"}</span>
-            ))}
-          </div>
-          <span className="ml-2 text-gray-500">({product.rating || 0})</span>
+        <div className="flex items-center text-sm mb-3">
+          <StarRating rating={product.rating} size="text-xs" />
+          <span className="ml-2 text-xs text-gray-400 font-medium">({product.rating || 0} reviews)</span>
         </div>
 
-        <div className="flex flex-1 flex-col justify-end pt-2">
+        <div className="flex flex-1 items-end justify-between pt-2 border-t border-gray-50 mt-auto">
           {product.discountedPrice && product.price > product.discountedPrice ? (
-            <div className="flex items-baseline gap-2">
-              <p className="text-xl font-bold text-gray-900">
-                ₹{product.discountedPrice.toFixed(2)}
+            <div className="flex flex-col">
+              <p className="text-lg font-extrabold text-black">
+                {formatPrice(product.discountedPrice)}
               </p>
-              <p className="text-sm font-medium text-gray-500 line-through">
-                ₹{product.price.toFixed(2)}
+              <p className="text-xs font-medium text-gray-400 line-through">
+                {formatPrice(product.price)}
               </p>
             </div>
           ) : (
-            <p className="text-xl font-bold text-gray-900">
-              ₹{(product.price || 0).toFixed(2)}
+            <p className="text-lg font-extrabold text-black">
+              {formatPrice(product.price)}
             </p>
           )}
+          
+          <button 
+             onClick={handleAddToCart}
+             className="text-xs font-bold uppercase tracking-wider text-indigo-600 hover:text-indigo-800 transition-colors opacity-0 group-hover:opacity-100"
+          >
+            Add to Cart
+          </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

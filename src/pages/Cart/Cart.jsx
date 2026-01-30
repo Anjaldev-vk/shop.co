@@ -112,6 +112,8 @@ import React from "react";
 import { useCart } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
 
+import { formatPrice } from "../../utils/formatPrice";
+
 const Cart = () => {
   const { cart, addToCart, decrementCartItem, removeFromCart, clearCart } = useCart();
   const navigate = useNavigate();
@@ -138,8 +140,7 @@ const Cart = () => {
 
   const calculateTotal = () =>
     cart
-      .reduce((acc, item) => acc + getItemPrice(item) * (item.quantity || 1), 0)
-      .toFixed(2);
+      .reduce((acc, item) => acc + getItemPrice(item) * (item.quantity || 1), 0);
 
   // This is the section for when the cart has items.
   return (
@@ -157,10 +158,10 @@ const Cart = () => {
             <div className="ml-4 flex-1 text-center sm:text-left">
               <h3 className="text-lg font-semibold">{item.name || "Unnamed Product"}</h3>
               <p className="text-gray-600">
-                Price: {Number(getItemPrice(item)).toFixed(2)} × {item.quantity || 1}₹
+                Price: {formatPrice(getItemPrice(item))} × {item.quantity || 1}
               </p>
               <p className="text-gray-800 font-bold">
-                Total: {(getItemPrice(item) * (item.quantity || 1)).toFixed(2)}₹
+                Total: {formatPrice(getItemPrice(item) * (item.quantity || 1))}
               </p>
 
               {/* Increment / Decrement Buttons */}
@@ -202,7 +203,7 @@ const Cart = () => {
 
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto justify-between md:justify-end">
           <p className="text-xl font-bold text-gray-800">
-            Total: {calculateTotal()}₹
+            Total: {formatPrice(calculateTotal())}
           </p>
           <button
             onClick={() => navigate("/checkout")}

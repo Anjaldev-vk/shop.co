@@ -51,47 +51,57 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-black/60 z-0"></div>
 
         {/* Content, now with z-10 to be on top of the overlay */}
-        <div className="relative z-10 max-w-4xl mx-auto">
-          {/* Text color changed to white */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-extrabold text-white mb-4 tracking-wide animate-slide-up">
-            Elevate Your Wardrobe
+        <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center">
+          {/* Badge */}
+          <span className="inline-block px-4 py-1.5 mb-6 text-xs sm:text-sm font-semibold tracking-wider text-white uppercase bg-white/10 backdrop-blur-md rounded-full border border-white/20 animate-fade-in-up">
+            New Collection 2026
+          </span>
+
+          {/* Headline */}
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-tight animate-slide-up text-center drop-shadow-lg">
+            Elevate Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Wardrobe</span>
           </h1>
-          {/* Text color changed to a light gray */}
-          <p className="text-sm sm:text-base md:text-lg text-gray-200 mb-8 max-w-2xl mx-auto leading-relaxed">
+
+          {/* Subtext */}
+          <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed text-center font-light">
             Discover our exclusive collection of finely crafted garments,
             designed to reflect your unique style and sophistication.
           </p>
+
+          {/* CTA Button */}
           <button
-            className="bg-gray-900 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-md font-medium text-sm sm:text-base hover:bg-gray-700 hover:shadow-xl transition-all duration-300"
+            className="group relative bg-white text-black px-8 py-4 rounded-full font-bold text-base hover:bg-gray-100 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] transform hover:-translate-y-1"
             onClick={() => navigate("/products")}
           >
-            Shop Now
+            <span className="relative z-10 flex items-center gap-2">
+              Shop Now
+              <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </span>
           </button>
 
-          {/* Animated Counters container text color changed to white */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-10 mt-12 text-white">
+          {/* Animated Counters */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-16 mt-16 sm:mt-24 w-full max-w-3xl border-t border-white/10 pt-8 sm:pt-12">
             <div className="flex flex-col items-center">
-              <p className="text-2xl sm:text-3xl font-bold">
+              <p className="text-3xl sm:text-4xl font-bold text-white mb-1">
                 <Counter target={200} />
               </p>
-              {/* Subtext color changed to a lighter gray */}
-              <p className="text-xs sm:text-sm text-gray-300">
+              <p className="text-sm text-gray-400 font-medium uppercase tracking-wide">
                 International Brands
               </p>
             </div>
-            <div className="flex flex-col items-center">
-              <p className="text-2xl sm:text-3xl font-bold">
+            <div className="flex flex-col items-center border-l border-r border-white/10 px-4">
+              <p className="text-3xl sm:text-4xl font-bold text-white mb-1">
                 <Counter target={2000} />
               </p>
-              <p className="text-xs sm:text-sm text-gray-300">
+              <p className="text-sm text-gray-400 font-medium uppercase tracking-wide">
                 High-Quality Products
               </p>
             </div>
             <div className="flex flex-col items-center">
-              <p className="text-2xl sm:text-3xl font-bold">
+              <p className="text-3xl sm:text-4xl font-bold text-white mb-1">
                 <Counter target={30000} />
               </p>
-              <p className="text-xs sm:text-sm text-gray-300">
+              <p className="text-sm text-gray-400 font-medium uppercase tracking-wide">
                 Happy Customers
               </p>
             </div>

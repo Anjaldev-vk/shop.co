@@ -4,6 +4,8 @@ import { useWishlist } from "../../context/WishlistContext";
 import { useCart } from "../../context/CartContext";
 import { AuthContext } from "../../context/AuthContext";
 
+import { formatPrice } from "../../utils/formatPrice";
+
 // --- SVG Icon Components for a professional look ---
 const HeartIcon = (props) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -67,7 +69,7 @@ const WishlistItem = ({ item, onAddToCart, onRemove, onNavigate }) => {
 
       <div className="flex-shrink-0 text-center sm:text-right">
         <p className="text-xl font-bold text-gray-900 mb-4">
-            {item.price ? `₹${item.price.toFixed(2)}` : "₹0.00"}
+            {formatPrice(item.price)}
         </p>
         <div className="flex items-center gap-3">
           <button

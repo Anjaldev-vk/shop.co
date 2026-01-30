@@ -1,5 +1,6 @@
 import React from 'react';
-import { Routes, Route, Outlet } from 'react-router-dom';
+import { Routes, Route, Outlet, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 
 import { AuthProvider } from './context/AuthContext';
 import { ProductProvider } from './context/ProductContext';
@@ -43,48 +44,52 @@ const AppLayout = () => (
 );
 
 function App() {
+  const location = useLocation();
+
   return (
     <AuthProvider>
       <ProductProvider>
         <CartProvider>
           <WishlistProvider>
             <Toaster position="top-right" gutter={15} toastOptions={{ duration: 1000 }} />
-            <Routes>
-              <Route element={<AppLayout />}> 
-                {/* Public routes */}
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/products" element={<ProductList />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<ContactPage />} />
+            <AnimatePresence mode="wait">
+              <Routes location={location} key={location.pathname}>
+                <Route element={<AppLayout />}> 
+                  {/* Public routes */}
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/products" element={<ProductList />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<ContactPage />} />
 
-                {/* Protected routes (login required) */}
-                <Route path="/products/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
-                <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
-                <Route path="/wishlist" element={<ProtectedRoute><WishlistPage /></ProtectedRoute>} />
-                <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
-                <Route path="/order-success" element={<ProtectedRoute><OrderSuccess /></ProtectedRoute>} />
-                <Route path="/my-orders" element={<ProtectedRoute><MyOrders /></ProtectedRoute>} />
-              </Route>
+                  {/* Protected routes (login required) */}
+                  <Route path="/products/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
+                  <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+                  <Route path="/wishlist" element={<ProtectedRoute><WishlistPage /></ProtectedRoute>} />
+                  <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                  <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+                  <Route path="/order-success" element={<ProtectedRoute><OrderSuccess /></ProtectedRoute>} />
+                  <Route path="/my-orders" element={<ProtectedRoute><MyOrders /></ProtectedRoute>} />
+                </Route>
 
-              {/* Admin routes */}
-              <Route
-                path="/admin"
-                element={
-                  <ProtectedRoute>
-                    <AdminLayout />
-                  </ProtectedRoute>
-                }
-              >
-                <Route index element={<AdminDashboard />} />
-                <Route path="dashboard" element={<AdminDashboard />} />
-                <Route path="products" element={<ManageProduct />} />
-                <Route path="orders" element={<ViewOrders />} />
-                <Route path="users" element={<ManageUsers />} />
-              </Route>
-            </Routes>
+                {/* Admin routes */}
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute>
+                      <AdminLayout />
+                    </ProtectedRoute>
+                  }
+                >
+                  <Route index element={<AdminDashboard />} />
+                  <Route path="dashboard" element={<AdminDashboard />} />
+                  <Route path="products" element={<ManageProduct />} />
+                  <Route path="orders" element={<ViewOrders />} />
+                  <Route path="users" element={<ManageUsers />} />
+                </Route>
+              </Routes>
+            </AnimatePresence>
           </WishlistProvider>
         </CartProvider>
       </ProductProvider>
